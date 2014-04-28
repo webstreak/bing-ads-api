@@ -10,14 +10,16 @@ Gem::Specification.new do |s|
 	s.authors     = ["Juan Pablo Lopez N"]
 	s.email       = ["jp.lopez.navarro@gmail.cl"]
 	s.homepage    = "http://www.github.com/jplopez/bing-ads-api"
-	s.summary     = "Bing Ads API for Rails"
-	s.description = "A set of pure RoR classes for the Bing Ads API"
+	s.summary     = "Bing Ads API for Ruby"
+	s.description = "A set of pure Ruby classes for the Bing Ads API"
 
 	s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-	s.test_files = Dir["test/**/*"]
+	s.test_files = Dir["spec/**/*"]
 
-	s.add_dependency "rails"
 	s.add_dependency "savon", "~> 2.3.0"
+	s.add_dependency "activesupport"
 
-	s.add_development_dependency "sqlite3"
+	s.add_development_dependency "rspec"
+	s.add_development_dependency "guard"
+	s.add_development_dependency "guard-rspec"
 end

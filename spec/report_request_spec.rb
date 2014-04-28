@@ -1,94 +1,77 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require 'spec_helper'
 
-# Public : Test case for ReportRequest an its subclasses 
-# 
-# Author:: jlopezn@neonline.cl 
-class ReportRequestTest < ActiveSupport::TestCase
+# Author:: jlopezn@neonline.cl
+describe BingAdsApi::ReportRequest do
 
-	def setup
-		
+	before :all do
 		@config = BingAdsApi::Config.instance
 		@options = {
 			:environment => :sandbox,
-			:username => "desarrollo_neonline",
-			:password => "neonline2013",
+			:username => "ruby_bing_ads_sbx",
+			:password => "sandbox123",
 			:developer_token => "BBD37VB98",
-			:customer_id => "21021746",
-			:account_id => "5978083"
+			:customer_id => "21025739",
+			:account_id => "8506945"
 		}
 		@service = BingAdsApi::Reporting.new(@options)
-
 	end
 
-	test "truth" do
-		assert_kind_of Module, BingAdsApi
+	it "truth" do
+		expect(BingAdsApi).to be_kind_of(Module)
 	end
-	
-	test "initialize report request" do
-		assert_nothing_raised(Exception, "Report request not instantiated") {
+
+	it "initialize report request" do
+		expect{
 			report_request = BingAdsApi::ReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
 				:return_only_complete_data => true)
-			puts "report request"
-			puts report_request.to_hash(:camelcase)
-		}
-
+		}.not_to raise_error
 	end
 
-
-	test "should raise exception" do
-		assert_raises(Exception, "Bad format not raised") {
+	it "should raise exception" do
+		expect{
 			report_request = BingAdsApi::ReportRequest.new(:format => :invalid,
 				:language => :english, :report_name => "My Report",
 				:return_only_complete_data => true)
-		}
+		}.to raise_error
 
-		assert_raises(Exception, "Bad language not raised") {
+		expect{
 			report_request = BingAdsApi::ReportRequest.new(:format => :xml,
 				:language => :swahili, :report_name => "My Report",
 				:return_only_complete_data => true)
-		}
-
+		}.to raise_error
 	end
-	
-	
-	test "initialize performance report request" do
-		assert_nothing_raised(Exception, "Performance Report request not instantiated") {
+
+	it "initialize performance report request" do
+		expect{
 			performance_report_request = BingAdsApi::PerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
 				:aggregation => :hourly, :time => :today)
-			puts "performance report request"
-			puts performance_report_request.to_hash(:camelcase)
-		}
+		}.not_to raise_error
 	end
 
-
-	test "should raise aggregation exception" do
-		assert_raises(Exception, "Bad aggregation not raised") {
+  it "should raise aggregation exception" do
+		expect{
 			performance_report_request = BingAdsApi::PerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
 				:aggregation => :invalid_aggregation)
-		}
-
+		}.to raise_error
 	end
 
-
-	test "should raise time exception" do
-		assert_raises(Exception, "Bad aggregation not raised") {
+	it "should raise time exception" do
+		expect{
 			performance_report_request = BingAdsApi::PerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
 				:aggregation => :weekly)
-		}
-
+		}.to raise_error
 	end
 
-
-	test "initialize campaign performance report request" do
-		assert_nothing_raised(Exception, "CampaignPerformanceReportRequest not instantiated") {
+	it "initialize campaign performance report request" do
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# String as bing expected
@@ -99,30 +82,28 @@ class ReportRequestTest < ActiveSupport::TestCase
 					# nil criteria
 					:status => nil
 				},
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => [
 					{:account_id => 1234, :campaign_id => 1234},
 					{:account_id => 1234, :campaign_id => 1234},
 					{:account_id => 1234, :campaign_id => 1234}]
 				})
-			puts "campaign performance report request 1"
-			puts performance_report_request.to_hash(:camelcase)
 
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, 
+				:aggregation => :hourly,
 				:time => {
 					:custom_date_range_start => {
 						:day => 1,
 						:month => 12,
 						:year => 2013
-					}, 
+					},
 					:custom_date_range_end => {
 						:day => 31,
 						:month => 12,
 						:year => 2013
 					}
-				}, 
+				},
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# String as bing expected
@@ -133,21 +114,16 @@ class ReportRequestTest < ActiveSupport::TestCase
 					# nil criteria
 					:status => nil
 				},
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => []})
-			puts "campaign performance report request 2"
-			puts performance_report_request.to_hash(:camelcase)
-
-
-		}
+		}.not_to raise_error
 	end
 
-
-	test "initialize account performance report request" do
-		assert_nothing_raised(Exception, "AccountPerformanceReportRequest not instantiated") {
+	it "initialize account performance report request" do
+		expect{
 			performance_report_request = BingAdsApi::AccountPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, 
+				:aggregation => :hourly,
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# String as bing expected
@@ -157,14 +133,12 @@ class ReportRequestTest < ActiveSupport::TestCase
 					# no specified value
 					:device_type => nil
 				},
-				:scope => {:account_ids => 12345}, 
+				:scope => {:account_ids => 12345},
 				:time => :today )
-			puts "account performance report request 1"
-			puts performance_report_request.to_hash(:camelcase)
 
 			performance_report_request = BingAdsApi::AccountPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, 
+				:aggregation => :hourly,
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# String as bing expected
@@ -180,67 +154,59 @@ class ReportRequestTest < ActiveSupport::TestCase
 						:day => 1,
 						:month => 12,
 						:year => 2013
-					}, 
+					},
 					:custom_date_range_end => {
 						:day => 31,
 						:month => 12,
 						:year => 2013
 					}
 				})
-			puts "account performance report request 2"
-			puts performance_report_request.to_hash(:camelcase)
-
-		}
+		}.not_to raise_error
 	end
 
-
-	test "should raise column exception " do
-		assert_raises(Exception, "Bad column name for CampaignPerformanceReportRequest not raised") {
+	it "should raise column exception " do
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period, :unknown_column ],
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => []})
-		}
+		}.to raise_error
 
-
-		assert_raises(Exception, "Bad column value for CampaignPerformanceReportRequest not raised") {
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period, "UnknownColumn" ],
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => []})
-		}
+		}.to raise_error
 	end
 
-
-	test "should raise scope exception " do
-		assert_raises(Exception, "Bad scope for account_ids not raised") {
+	it "should raise scope exception " do
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period ],
 				:scope => { :campaigns => []})
-		}
+		}.to raise_error
 
-		assert_raises(Exception, "Bad scope for campaigns not raised") {
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period ],
 				:scope => {:account_ids => 12345 })
-		}
-
+		}.to raise_error
 	end
 
-
-	test "campaign performance filter " do
-		assert_nothing_raised(Exception, "Bad filter for CampaignPerformanceReportRequest") {
+	it "campaign performance filter " do
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# String as bing expected
@@ -251,17 +217,16 @@ class ReportRequestTest < ActiveSupport::TestCase
 					# nil criteria
 					:status => nil
 				},
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => []})
-		}
+		}.not_to raise_error
 	end
 
-
-	test "should raise campaign performance filter exception " do
-		assert_raises(Exception, "Bad filter string for CampaignPerformanceReportRequest not raised") {
+	it "should raise campaign performance filter exception " do
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# Wrong String as bing expected
@@ -272,14 +237,14 @@ class ReportRequestTest < ActiveSupport::TestCase
 					# nil criteria
 					:status => nil
 				},
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => []})
-		}
+		}.to raise_error
 
-		assert_raises(Exception, "Bad filter symbol for CampaignPerformanceReportRequest not raised") {
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# Wrong String as bing expected
@@ -290,23 +255,22 @@ class ReportRequestTest < ActiveSupport::TestCase
 					# nil criteria
 					:status => nil
 				},
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => []})
-		}
+		}.to raise_error
 
-		assert_raises(Exception, "Bad filter criteria for CampaignPerformanceReportRequest not raised") {
+		expect{
 			performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,
 				:language => :english, :report_name => "My Report",
-				:aggregation => :hourly, :time => :today, 
+				:aggregation => :hourly, :time => :today,
 				:columns => [:account_name, :account_number, :time_period ],
 				:filter => {
 					# Wrong filter criteria. ie: invalid key
 					:not_a_valid_criteria => "Bleh",
 				},
-				:scope => {:account_ids => 12345, 
+				:scope => {:account_ids => 12345,
 				:campaigns => []})
-		}
-
+		}.to raise_error
 	end
 
 end

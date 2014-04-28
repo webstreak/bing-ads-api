@@ -1,47 +1,44 @@
 # -*- encoding : utf-8 -*-
-require 'test_helper'
+require 'spec_helper'
+require 'bing-ads-api/config'
+require 'bing-ads-api/service/campaign_management'
 
-# Public : Test case for Campaign Management services 
-# 
-# Author:: jlopezn@neonline.cl 
-class CampaignManagementTest < ActiveSupport::TestCase
+# Author:: jlopezn@neonline.cl
+describe BingAdsApi::CampaignManagement do
 
-	def setup
-		
+	before :all do
 		@config = BingAdsApi::Config.instance
 		@options = {
 			:environment => :sandbox,
-			:username => "desarrollo_neonline",
-			:password => "neonline2013",
+			:username => "ruby_bing_ads_sbx",
+			:password => "sandbox123",
 			:developer_token => "BBD37VB98",
-			:customer_id => "21021746",
-			:account_id => "5978083"
+			:customer_id => "21025739",
+			:account_id => "8506945"
 		}
 		@service = BingAdsApi::CampaignManagement.new(@options)
-
 	end
 
-	test "truth" do
-		assert_kind_of Module, BingAdsApi
+	it "truth" do
+		expect(BingAdsApi).to be_kind_of(Module)
 	end
-	
-	test "initialize" do
+
+	it "initialize" do
 		@service = BingAdsApi::CampaignManagement.new(@options)
-		assert !@service.nil?, "CampaignManagement service not instantiated"
+		expect(@service).not_to be_nil
 	end
 
-	test "get campaigns by account" do
+	it "get campaigns by account" do
 		response = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !response.nil?, "No response received"
-		assert response.is_a?(Array), "No Array as response received"
+		expect(response).not_to be_nil
+		expect(response).to be_kind_of(Array)
 	end
 
-	test "add campaign" do
-		
-		name = "Test Campaign #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
+	it "add campaign" do
+		name = "it Campaign #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
 		campaigns = [
 			BingAdsApi::Campaign.new(
-			:budget_type => BingAdsApi::Campaign::DAILY_BUDGET_STANDARD, 
+			:budget_type => BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
 			:conversion_tracking_enabled => "false",
 			:daily_budget => 2000,
 			:daylight_saving => "false",
@@ -52,17 +49,15 @@ class CampaignManagementTest < ActiveSupport::TestCase
 			:time_zone => BingAdsApi::Campaign::SANTIAGO),
 		]
 		response = @service.add_campaigns(@options[:account_id], campaigns)
-		
-		puts "response[:campaign_ids][:long]"
-		puts response[:campaign_ids][:long]
-		assert !response[:campaign_ids][:long].nil?, "No campaigns id received"
+
+		expect(response[:campaign_ids][:long]).not_to be_nil
 	end
 
-	test "add campaigns" do
-		name = "Test Campaign #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
+	it "add campaigns" do
+		name = "it Campaign #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
 		campaigns = [
 			BingAdsApi::Campaign.new(
-				:budget_type => BingAdsApi::Campaign::DAILY_BUDGET_STANDARD, 
+				:budget_type => BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
 				:conversion_tracking_enabled => "false",
 				:daily_budget => 2000,
 				:daylight_saving => "false",
@@ -73,7 +68,7 @@ class CampaignManagementTest < ActiveSupport::TestCase
 				:time_zone => BingAdsApi::Campaign::SANTIAGO),
 
 			BingAdsApi::Campaign.new(
-				:budget_type => BingAdsApi::Campaign::DAILY_BUDGET_STANDARD, 
+				:budget_type => BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
 				:conversion_tracking_enabled => "false",
 				:daily_budget => 2500,
 				:daylight_saving => "false",
@@ -85,76 +80,56 @@ class CampaignManagementTest < ActiveSupport::TestCase
 
 		]
 		response = @service.add_campaigns(@options[:account_id], campaigns)
-		puts "response.inspect"
-		puts response.inspect
 
-		puts "response[:campaign_ids][:long]"
-		puts response[:campaign_ids][:long]
-		assert !response[:campaign_ids][:long].nil?, "No campaigns ids received"
-		assert response[:campaign_ids][:long].is_a?(Array), "No array with campaign ids received"
-		assert response[:campaign_ids][:long].size == campaigns.size, "expected campaign_ids: #{campaigns.size}. Received: #{response[:campaign_ids][:long].size}"
-
+		expect(response[:campaign_ids][:long]).not_to be_nil
+		expect(response[:campaign_ids][:long]).to be_kind_of(Array)
+		expect(response[:campaign_ids][:long].size).to eq(campaigns.size)
 	end
 
-
-	test "update campaigns" do
-
+	it "update campaigns" do
 		campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !campaigns.nil?, "No campaigns received"
+		expect(campaigns).not_to be_nil
 
 		campaigns.each do |campaign|
 			campaign.description = campaign.description + " updated #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
 			campaign.status = nil
-		end 
+		end
 
 		response = @service.update_campaigns(@options[:account_id], campaigns)
 
-		puts "UpdateCampaigns response"
-		puts response.inspect
-		assert !response.nil?, "No response received"
-
+		expect(response).not_to be_nil
 	end
 
-
-	test "get ad groups by campaign" do
+	it "get ad groups by campaign" do
 		campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !campaigns.empty?, "No campaigns received for account id #{@options[:account_id]}" 
+		expect(campaigns).not_to be_empty
 		campaign_id = campaigns.first.id
 
 		response = @service.get_ad_groups_by_campaign_id(campaign_id)
 
-		puts "GetAdGroupsByCampaignId response :"
-		puts response.inspect
-		
-		assert !response.empty?, "No ad groups received from campaign #{campaign_id}"
-		assert response.is_a?(Array), "No array response received"
+		expect(response).not_to be_empty
+		expect(response).to be_kind_of(Array)
 	end
 
-
-	test "get ad groups by ids" do
+	it "get ad groups by ids" do
 		campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !campaigns.empty?, "No campaigns received for account id #{@options[:account_id]}" 
+		expect(campaigns).not_to be_empty
 		campaign_id = campaigns.first.id
 
 		groups = @service.get_ad_groups_by_campaign_id(campaign_id)
-		
+
 		ad_group_ids = groups.map{ |gr| gr.id }
 		response = @service.get_ad_groups_by_ids(campaign_id, ad_group_ids)
 
-		puts "GetAdGroupsByIds response :"
-		puts response.inspect
-		
-		assert !response.nil?, "No ad groups received in campaign #{campaign_id} where ad_group_ids #{ad_group_ids}"
-		assert response.size == ad_group_ids.size, "Excpected #{ad_group_ids.size} ad groups. Received #{response.size}"
-
+		expect(response).not_to be_nil
+		expect(response.size).to eq(ad_group_ids.size)
 	end
 
-	test "add ad group" do
-
+	it "add ad group" do
 		campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !campaigns.empty?, "No campaigns received for account id #{@options[:account_id]}" 
+		expect(campaigns).not_to be_empty
 		campaign_id = campaigns.first.id
-		
+
 		name = "Ad Group #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
 		ad_groups = [
 			BingAdsApi::AdGroup.new(
@@ -165,20 +140,15 @@ class CampaignManagementTest < ActiveSupport::TestCase
 			:bidding_model => BingAdsApi::AdGroup::KEYWORD)
 		]
 		response = @service.add_ad_groups(campaign_id, ad_groups)
-		
-		puts "AddAdGroups response[:ad_group_ids][:long]"
-		puts response[:ad_group_ids][:long]
-		assert !response[:ad_group_ids][:long].nil?, "No ad groups id received"
 
+		expect(response[:ad_group_ids][:long]).not_to be_nil
 	end
 
-
-	test "add ad groups" do
-		
+	it "add ad groups" do
 		campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !campaigns.empty?, "No campaigns received for account id #{@options[:account_id]}" 
+		expect(campaigns).not_to be_empty
 		campaign_id = campaigns.first.id
-		
+
 		name = "Ad Group #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
 		ad_groups = [
 			BingAdsApi::AdGroup.new(
@@ -197,42 +167,33 @@ class CampaignManagementTest < ActiveSupport::TestCase
 
 		]
 		response = @service.add_ad_groups(campaign_id, ad_groups)
-		
-		puts "AddAdGroups response[:ad_group_ids][:long]"
-		puts response[:ad_group_ids][:long]
-		assert !response[:ad_group_ids][:long].nil?, "No ad groups id received"
-		assert response[:ad_group_ids][:long].is_a?(Array), "No array with ad group ids received"
-		assert response[:ad_group_ids][:long].size == ad_groups.size, "expected ad_group_ids: #{ad_groups.size}. Received: #{response[:ad_group_ids][:long].size}"
 
+		expect(response[:ad_group_ids][:long]).not_to be_nil
+		expect(response[:ad_group_ids][:long]).to be_kind_of(Array)
+		expect(response[:ad_group_ids][:long].size).to eq(ad_groups.size)
 	end
 
-
-	test "update ad groups" do
+	it "update ad groups" do
 		campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !campaigns.empty?, "No campaigns received for account id #{@options[:account_id]}" 
+		expect(campaigns).not_to be_empty
 		campaign_id = campaigns.first.id
-		
+
 		ad_groups = @service.get_ad_groups_by_campaign_id(campaign_id)
-		
+
 		ad_groups_to_update = ad_groups.map do |ad_group|
 			BingAdsApi::AdGroup.new(
-				:id => ad_group.id, 
+				:id => ad_group.id,
 				:name => ad_group.name + " updated #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}" )
 		end
-		
-		response = @service.update_ad_groups(campaign_id, ad_groups_to_update)
-		
-		puts "UpdateAdGroups response"
-		puts response
-		assert !response.nil?, "No response received"
 
+		response = @service.update_ad_groups(campaign_id, ad_groups_to_update)
+
+		expect(response).not_to be_nil
 	end
-	
-	
-	test "add ads" do
-		
+
+	it "add ads" do
 		ad_group_id = 1980939070
-		
+
 		date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
 
 		# TextAds
@@ -254,14 +215,13 @@ class CampaignManagementTest < ActiveSupport::TestCase
 				:title => "TextAd 2")
 		]
 		response = @service.add_ads(ad_group_id, text_ads)
-		assert !response.nil? , "No response received adding text ads"
+		expect(response).not_to be_nil
 
-		assert response[:partial_errors].nil?, "TextAds response with partial errors"
+		expect(response[:partial_errors]).not_to be_nil
 
 		puts "Text: AddAds response[:ad_ids][:long]"
 		puts response[:ad_ids][:long]
-		assert !response[:ad_ids][:long].nil?, "No ad ids received for TextAds"
-
+		expect(response[:ad_ids][:long]).not_to be_nil
 
 		mobile_ads = [
 			BingAdsApi::MobileAd.new(
@@ -281,32 +241,30 @@ class CampaignManagementTest < ActiveSupport::TestCase
 				:title => "MobileAd 2")
 		]
 		response = @service.add_ads(ad_group_id, mobile_ads)
-		assert !response.nil? , "No response received adding mobile ads"
+		expect(response).not_to be_nil
 
 		puts response[:partial_errors] if !response[:partial_errors].nil?
-		assert response[:partial_errors].nil?, "MobileAds response with partial errors"
-		
+		expect(response[:partial_errors]).not_to be_nil
+
 		puts "Mobile: AddAds response[:ad_ids][:long]"
 		puts response[:ad_ids][:long]
-		assert !response[:ad_ids][:long].nil?, "No ad ids received for MobileAds"
+		expect(response[:ad_ids][:long]).not_to be_nil
 
 		# product_ads = [
 			# BingAdsApi::MobileAd.new(
 				# :promotional_text => "My Promotional text #{date}"),
-# 
+#
 			# BingAdsApi::MobileAd.new(
 				# :promotional_text => "My Promotional text 2 #{date}")
 		# ]
 		# response = @service.add_ads(ad_group_id, product_ads)
-		# assert !response.nil? , "No response received adding product ads"
+		# expect(response).not_to be_nil
 
 	end
-	
-	
-	test "add ad" do
 
+	it "add ad" do
 		ad_group_id = 1980939070
-		
+
 		date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
 
 		# TextAd
@@ -317,17 +275,17 @@ class CampaignManagementTest < ActiveSupport::TestCase
 				:display_url => "AdXion.com",
 				:text => "Text Ad #{date}",
 				:title => "Text Ad")
-		
-		response = @service.add_ads(ad_group_id, text_ad)
-		assert !response.nil? , "No response received adding text ad"
 
-		assert response[:partial_errors].nil?, "TextAd response with partial errors"
+		response = @service.add_ads(ad_group_id, text_ad)
+		expect(response).not_to be_nil
+
+		expect(response[:partial_errors]).not_to be_nil
 
 		puts "Text: AddAds response[:ad_ids][:long]"
 		puts response[:ad_ids][:long]
-		assert !response[:ad_ids][:long].nil?, "No ad ids received for TextAd"
+		expect(response[:ad_ids][:long]).not_to be_nil
 
-		
+
 		# MobileAd
 		mobile_ad = BingAdsApi::MobileAd.new(
 				:bussines_name => "Bussiness",
@@ -336,108 +294,100 @@ class CampaignManagementTest < ActiveSupport::TestCase
 				:phone_number => "555555555",
 				:text => "Publish with us",
 				:title => "Mobile Ad")
-		
+
 		response = @service.add_ads(ad_group_id, mobile_ad)
-		assert !response.nil? , "No response received adding mobile ad"
+		expect(response).not_to be_nil
 
 		puts response[:partial_errors] if !response[:partial_errors].nil?
-		assert response[:partial_errors].nil?, "MobileAd response with partial errors"
-		
+		expect(response[:partial_errors]).not_to be_nil
+
 		puts "Mobile: AddAds response[:ad_ids][:long]"
 		puts response[:ad_ids][:long]
-		assert !response[:ad_ids][:long].nil?, "No ad ids received for MobileAd"
-
+		expect(response[:ad_ids][:long]).not_to be_nil
 
 		# ProductAd
 		# product_ad = BingAdsApi::ProductAd.new(
 				# :promotional_text => "Promotion #{date}")
 		# response = @service.add_ads(ad_group_id, product_ad)
-		# assert !response.nil? , "No response received adding product ad"
-# 
+		# expect(response).not_to be_nil
+#
 		# puts response[:partial_errors] if !response[:partial_errors].nil?
-		# assert response[:partial_errors].nil?, "ProductAd response with partial errors"
-# 		
+		# expect(response[:partial_errors]).not_to be_nil
+#
 		# puts "Product: AddAds response[:ad_ids][:long]"
 		# puts response[:ad_ids][:long]
-		# assert !response[:ad_ids][:long].nil?, "No ad ids received for ProductAd"
-
+		# expect(response[:ad_ids][:long]).not_to be_nil
 	end
 
-	test "add ad with partial errors" do
-
+	it "add ad with partial errors" do
 		ad_group_id = 1980939070
-		
+
 		date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
 		text_ad = BingAdsApi::TextAd.new(
 				:type => BingAdsApi::Ad::TEXT,
 				:status => BingAdsApi::Ad::INACTIVE,
 				:destination_url => "http://www.adxion.com",
 				:display_url => "http://www.adxion.com",
-				:text => "Test Text Ad #{date}",
-				:title => "Test Text Ad #{date}")
-		
+				:text => "it Text Ad #{date}",
+				:title => "it Text Ad #{date}")
+
 		response = @service.add_ads(ad_group_id, text_ad)
-		assert !response.nil? , "No response received adding text ad"
+		expect(response).not_to be_nil
 
 		puts response[:partial_errors]
-		assert !response[:partial_errors].nil?, "response should have partial errors"
+		expect(response[:partial_errors]).not_to be_nil
 	end
-	
-	
-	test "get ads by group id" do
+
+	it "get ads by group id" do
 		campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		assert !campaigns.empty?, "No campaigns received for account id #{@options[:account_id]}" 
+		expect(campaigns).not_to be_empty
 		campaign_id = campaigns.first.id
-		
+
 		ad_group = @service.get_ad_groups_by_campaign_id(campaign_id).first
-		
+
 		ads = @service.get_ads_by_ad_group_id(ad_group.id)
-		assert !ads.empty?, "No ads received for ad group #{ad_group.id}"
+		expect(ads).not_to be_empty
 		ads.each do |ad|
-			assert ad.is_a?(BingAdsApi::Ad), "Object received is not an ad"
-		end 
+			expect(ad).to be_kind_of(BingAdsApi::Ad)
+		end
 	end
-	
-	
-	test "get ads by ids" do
+
+	it "get ads by ids" do
 		# campaigns = @service.get_campaigns_by_account_id(@options[:account_id])
-		# assert !campaigns.empty?, "No campaigns received for account id #{@options[:account_id]}" 
+		# expect(campaigns).not_to be_empty
 		# campaign_id = campaigns.first.id
 		# ad_group = @service.get_ad_groups_by_campaign_id(campaign_id).first
 		# ads = @service.get_ads_by_ad_group_id(ad_group.id)
 		ad_group_id = 1980939070
 		ads = @service.get_ads_by_ad_group_id(ad_group_id)
-		assert !ads.nil?, "No ads by ad group response received" 
-		assert !ads.empty?, "No ads received for ad group #{ad_group_id}"
+		expect(ads).not_to be_nil
+		expect(ads).not_to be_empty
 
 		# Get 2 ads
 		ad_ids = [ads[0].id, ads[1].id]
-		ads_by_ids = @service.get_ads_by_ids(ad_group_id, ad_ids) 
-		assert !ads_by_ids.nil?, "No response received" 
-		assert !ads_by_ids.empty?, "No ads received for ad group #{ad_group_id} and ad ids #{ad_ids}"
-		assert ad_ids.size == ads_by_ids.size, "Expetected ads #{ad_ids.size}. Received #{ads_by_ids.size}"
+		ads_by_ids = @service.get_ads_by_ids(ad_group_id, ad_ids)
+		expect(ads_by_ids).not_to be_nil
+		expect(ads_by_ids).not_to be_empty
+		expect(ad_ids.size).to eq(ads_by_ids.size)
 		ads.each do |ad|
-			assert ad.is_a?(BingAdsApi::Ad), "Object received is not an ad"
-		end 
+			expect(ad).to be_kind_of(BingAdsApi::Ad)
+		end
 
 		# Get specific ad
 		ad_ids = [ads[0].id]
-		ads_by_ids = @service.get_ads_by_ids(ad_group_id, ad_ids) 
-		assert !ads_by_ids.nil?, "No response received" 
-		assert !ads.empty?, "No ads received for ad group #{ad_group_id} and ad ids #{ad_ids}"
-		assert ad_ids.size == ads_by_ids.size, "Expetected one ad. Received #{ads_by_ids.size}"
-
+		ads_by_ids = @service.get_ads_by_ids(ad_group_id, ad_ids)
+		expect(ads_by_ids).not_to be_nil
+		expect(ads).not_to be_empty
+		expect(ad_ids.size).to eq(ads_by_ids.size)
 	end
-	
-	
-	test "update ads" do
-		
+
+	it "update ads" do
 		ad_group_id = 1980939070
 		# One TextAd and one MobileAd
 		ad_ids = [4560003693, 4560003694]
-		
+
 		ads = @service.get_ads_by_ids(ad_group_id, ad_ids)
-		
+
 		# Loop to modify something in the adds
 		ads.each do |ad|
 			case ad.type
@@ -450,14 +400,13 @@ class CampaignManagementTest < ActiveSupport::TestCase
 			end
 			ad.status = nil
 			ad.editorial_status = nil
-		end 
-		
+		end
+
 		response = @service.update_ads(ad_group_id, ads)
-		assert !response.nil? , "No response received updateing ads"
+		expect(response).not_to be_nil
 
-		assert response[:partial_errors].nil?, "response with partial errors when updating ads"
-
+		expect(response[:partial_errors]).not_to be_nil
 	end
-	
-	
+
+
 end
