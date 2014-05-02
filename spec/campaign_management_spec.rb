@@ -80,14 +80,14 @@ describe BingAdsApi::CampaignManagement do
 				@campaign_id = create_campaign
 			end
 
-			it "should get campaigns by account when there are multiple campaigns" do
-				create_campaign
+			it "should get campaigns by account when there's only one campaign" do
 				response = service.get_campaigns_by_account_id(default_options[:account_id])
 				expect(response).not_to be_nil
 				expect(response).to be_kind_of(Array)
 			end
 
-			it "should get campaigns by account when there's only one campaign" do
+			it "should get campaigns by account when there are multiple campaigns" do
+				create_campaign
 				response = service.get_campaigns_by_account_id(default_options[:account_id])
 				expect(response).not_to be_nil
 				expect(response).to be_kind_of(Array)
@@ -144,6 +144,13 @@ describe BingAdsApi::CampaignManagement do
 			  @ad_group_id = create_ad_group(@campaign_id)
 			end
 
+			it "should get ad groups by campaign when there's only one ad group" do
+				response = service.get_ad_groups_by_campaign_id(@campaign_id)
+
+				expect(response).not_to be_empty
+				expect(response).to be_kind_of(Array)
+			end
+
 			it "should get ad groups by campaign when there are multiple ad groups" do
 				create_ad_group(@campaign_id)
 				response = service.get_ad_groups_by_campaign_id(@campaign_id)
@@ -152,18 +159,19 @@ describe BingAdsApi::CampaignManagement do
 				expect(response).to be_kind_of(Array)
 			end
 
-			it "should get ad groups by campaign when there's only one ad group" do
-				response = service.get_ad_groups_by_campaign_id(@campaign_id)
-
-				expect(response).not_to be_empty
-				expect(response).to be_kind_of(Array)
-			end
-
-			it "should get ad groups by ids" do
+			it "should get ad groups by ids when there's only one ad group" do
 				response = service.get_ad_groups_by_ids(@campaign_id, [@ad_group_id])
 
 				expect(response).not_to be_nil
 				expect(response.size).to eq(1)
+			end
+
+			it "should get ad groups by ids when there are multiple ad groups" do
+				ad_group_id_2 = create_ad_group(@campaign_id)
+				response = service.get_ad_groups_by_ids(@campaign_id, [@ad_group_id, ad_group_id_2])
+
+				expect(response).not_to be_nil
+				expect(response.size).to eq(2)
 			end
 
 			it "should update ad groups" do
