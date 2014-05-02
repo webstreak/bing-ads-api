@@ -17,6 +17,39 @@ describe BingAdsApi::CampaignManagement do
 	end
 	let(:service) { BingAdsApi::CampaignManagement.new(default_options) }
 
+	# Helper method to create a campaign on the remote API. Returns the created
+	# campaign id.
+	def create_campaign
+		name = "Test Campaign #{SecureRandom.uuid}"
+		campaigns = [
+			BingAdsApi::Campaign.new(
+				budget_type: BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
+				daily_budget: 2000,
+				daylight_saving: "false",
+				description: name + " description",
+				name: name + " name",
+				time_zone: BingAdsApi::Campaign::SANTIAGO
+			)
+		]
+		response = service.add_campaigns(default_options[:account_id], campaigns)
+		response[:campaign_ids][:long]
+	end
+
+	def create_ad_group(campaign_id)
+		name = "Ad Group #{SecureRandom.uuid}"
+		ad_groups = [
+			BingAdsApi::AdGroup.new(
+				ad_distribution: BingAdsApi::AdGroup::SEARCH,
+				language: BingAdsApi::AdGroup::SPANISH,
+				name: name + " name",
+				pricing_model: BingAdsApi::AdGroup::CPC,
+				bidding_model: BingAdsApi::AdGroup::KEYWORD
+			)
+		]
+		response = service.add_ad_groups(campaign_id, ad_groups)
+		response[:ad_group_ids][:long]
+	end
+
 	it "should initialize with options" do
 		new_service = BingAdsApi::CampaignManagement.new(options)
 		expect(new_service).not_to be_nil
@@ -44,19 +77,7 @@ describe BingAdsApi::CampaignManagement do
 		context "when a campaign has already been created" do
 
 			before :each do
-				name = "Test Campaign #{SecureRandom.uuid}"
-				campaigns = [
-					BingAdsApi::Campaign.new(
-						budget_type: BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
-						daily_budget: 2000,
-						daylight_saving: "false",
-						description: name + " description",
-						name: name + " name",
-						time_zone: BingAdsApi::Campaign::SANTIAGO
-					)
-				]
-				response = service.add_campaigns(default_options[:account_id], campaigns)
-				@campaign_id = response[:campaign_ids][:long]
+				@campaign_id = create_campaign
 			end
 
 			it "should get campaigns by account" do
@@ -90,39 +111,12 @@ describe BingAdsApi::CampaignManagement do
 
 	describe "ad group operations" do
 
-		it "should get ad groups by campaign" do
-			# need to create the ad groups as part of test setup
-			campaigns = service.get_campaigns_by_account_id(default_options[:account_id])
-			expect(campaigns).not_to be_empty
-			campaign_id = campaigns.first.id
-
-			response = service.get_ad_groups_by_campaign_id(campaign_id)
-
-			expect(response).not_to be_empty
-			expect(response).to be_kind_of(Array)
+		before :each do
+			@campaign_id = create_campaign
 		end
 
-		it "should get ad groups by ids" do
-			# need to create the ad groups as part of test setup
-			campaigns = service.get_campaigns_by_account_id(default_options[:account_id])
-			expect(campaigns).not_to be_empty
-			campaign_id = campaigns.first.id
-
-			groups = service.get_ad_groups_by_campaign_id(campaign_id)
-
-			ad_group_ids = groups.map{ |gr| gr.id }
-			response = service.get_ad_groups_by_ids(campaign_id, ad_group_ids)
-
-			expect(response).not_to be_nil
-			expect(response.size).to eq(ad_group_ids.size)
-		end
-
-		it "should add a single ad group" do
-			campaigns = service.get_campaigns_by_account_id(default_options[:account_id])
-			expect(campaigns).not_to be_empty
-			campaign_id = campaigns.first.id
-
-			name = "Ad Group #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
+		it "should add an ad group" do
+			name = "Ad Group #{SecureRandom.uuid}"
 			ad_groups = [
 				BingAdsApi::AdGroup.new(
 					ad_distribution: BingAdsApi::AdGroup::SEARCH,
@@ -132,60 +126,51 @@ describe BingAdsApi::CampaignManagement do
 					bidding_model: BingAdsApi::AdGroup::KEYWORD
 				)
 			]
-			response = service.add_ad_groups(campaign_id, ad_groups)
+			response = service.add_ad_groups(@campaign_id, ad_groups)
 
 			expect(response[:ad_group_ids][:long]).not_to be_nil
-			# check that ad group exists?
 		end
 
-		it "should add multiple ad groups" do
-			campaigns = service.get_campaigns_by_account_id(default_options[:account_id])
-			expect(campaigns).not_to be_empty
-			campaign_id = campaigns.first.id
+		context "ad group operations" do
 
-			name = "Ad Group #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
-			ad_groups = [
-				BingAdsApi::AdGroup.new(
-					ad_distribution: BingAdsApi::AdGroup::SEARCH,
-					language: BingAdsApi::AdGroup::SPANISH,
-					name: name + " name",
-					pricing_model: BingAdsApi::AdGroup::CPC,
-					bidding_model: BingAdsApi::AdGroup::KEYWORD
-				),
-				BingAdsApi::AdGroup.new(
-					ad_distribution: BingAdsApi::AdGroup::SEARCH,
-					language: BingAdsApi::AdGroup::SPANISH,
-					name: name + " second name",
-					pricing_model: BingAdsApi::AdGroup::CPC,
-					bidding_model: BingAdsApi::AdGroup::KEYWORD
-				)
-			]
-			response = service.add_ad_groups(campaign_id, ad_groups)
-
-			expect(response[:ad_group_ids][:long]).not_to be_nil
-			expect(response[:ad_group_ids][:long]).to be_kind_of(Array)
-			expect(response[:ad_group_ids][:long].size).to eq(ad_groups.size)
-			# check that ad groups exist?
-		end
-
-		it "should update ad groups" do
-			# manually create ad group here to updtae
-			campaigns = service.get_campaigns_by_account_id(default_options[:account_id])
-			expect(campaigns).not_to be_empty
-			campaign_id = campaigns.first.id
-
-			ad_groups = service.get_ad_groups_by_campaign_id(campaign_id)
-
-			ad_groups_to_update = ad_groups.map do |ad_group|
-				BingAdsApi::AdGroup.new(
-					id: ad_group.id,
-					name: ad_group.name + " updated #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}"
-				)
+			before :each do
+			  @ad_group_id = create_ad_group(@campaign_id)
 			end
 
-			response = service.update_ad_groups(campaign_id, ad_groups_to_update)
+			it "should get ad groups by campaign" do
+				create_ad_group(@campaign_id)
+				response = service.get_ad_groups_by_campaign_id(@campaign_id)
 
-			expect(response).not_to be_nil
+				expect(response).not_to be_empty
+				expect(response).to be_kind_of(Array)
+			end
+
+			it "should get ad groups by campaign when there's only one ad group" do
+				response = service.get_ad_groups_by_campaign_id(@campaign_id)
+
+				expect(response).not_to be_empty
+				expect(response).to be_kind_of(Array)
+			end
+
+			it "should get ad groups by ids" do
+				response = service.get_ad_groups_by_ids(@campaign_id, [@ad_group_id])
+
+				expect(response).not_to be_nil
+				expect(response.size).to eq(1)
+			end
+
+			it "should update ad groups" do
+				name = "Test Ad Group Update #{SecureRandom.uuid}"
+				ad_groups = [
+					BingAdsApi::AdGroup.new(
+						id: @ad_group_id,
+						name: name + " updated name"
+					)
+				]
+
+				response = service.update_ad_groups(@campaign_id, ad_groups)
+			end
+
 		end
 
 	end
