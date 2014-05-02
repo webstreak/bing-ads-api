@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
 	s.add_dependency "activesupport"
 
 	s.add_development_dependency "rspec"
-	s.add_development_dependency "rb-readline"
 	s.add_development_dependency "guard"
 	s.add_development_dependency "guard-rspec"
 end

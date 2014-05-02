@@ -65,7 +65,6 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.4)
       ffi (>= 0.5.0)
-    rb-readline (0.5.1)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -101,5 +100,4 @@ DEPENDENCIES
   bing-ads-api!
   guard
   guard-rspec
-  rb-readline
   rspec
