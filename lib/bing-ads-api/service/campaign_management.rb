@@ -139,6 +139,31 @@ module BingAdsApi
 		end
 
 
+		# Public : Delete one or more campaigns on the specified account
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# account_id - account that owns the campaigns
+		# campaign_ids - Array with the campaign IDs to be deleted
+		#
+		# === Examples
+		#   service.delete_campaigns(1, [1,2,3])
+		#   # =>  true
+		#
+		# Returns:: boolean. true if the delete was successful. false otherwise
+		#
+		# Raises:: exception
+		def delete_campaigns(account_id, campaign_ids)
+			message = {
+				:account_id => account_id,
+				:campaign_ids => {"ins1:long" => campaign_ids}
+			}
+			response = call(:delete_campaigns, message)
+			return get_response_hash(response, __method__)
+		end
+
+
 		# Public : Returns all the ad groups that belongs to the
 		# specified campaign
 		#

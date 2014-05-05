@@ -124,6 +124,14 @@ describe BingAdsApi::CampaignManagement do
 				expect(response).not_to be_nil
 			end
 
+			it "should delete campaigns" do
+				campaign_ids = [@campaign_id]
+
+				response = service.delete_campaigns(default_options[:account_id], campaign_ids)
+
+				expect(response).not_to be_nil
+			end
+
 		end
 	end
 
