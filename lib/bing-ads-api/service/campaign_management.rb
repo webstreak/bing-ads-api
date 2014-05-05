@@ -356,9 +356,9 @@ module BingAdsApi
 
 			ads_for_soap = []
 			if ads.is_a? Array
-				ads_for_soap = ads.map{ |ad| ad_to_hash(ad, :camelcase) }
+				ads_for_soap = ads.map{ |ad| ad.to_hash(:camelcase) }
 			elsif ads.is_a? BingAdsApi::Ad
-				ads_for_soap = ad_to_hash(ads, :camelcase)
+				ads_for_soap = ads.to_hash(:camelcase)
 			else
 				raise "ads must be an array or instance of BingAdsApi::Ad"
 			end
@@ -402,9 +402,9 @@ module BingAdsApi
 
 			ads_for_soap = []
 			if ads.is_a? Array
-				ads_for_soap = ads.map{ |ad| ad_to_hash(ad, :camelcase) }
+				ads_for_soap = ads.map{ |ad| ad.to_hash(:camelcase) }
 			elsif ads.is_a? BingAdsApi::Ad
-				ads_for_soap = ad_to_hash(ads, :camelcase)
+				ads_for_soap = ad.to_hash(:camelcase)
 			else
 				raise "ads must be an array or instance of BingAdsApi::Ad"
 			end
@@ -461,24 +461,6 @@ module BingAdsApi
 					ad = BingAdsApi::ProductAd.new(ad_hash)
 				end
 				return ad
-			end
-
-
-			# Private : Helper method to correctly assemble the Ad XML for SOAP requests
-			#
-			# Author:: jlopezn@neonline.cl
-			#
-			# ad - BingAdsApi::Ad subclass instance
-			#
-			# Examples
-			#   ad_to_hash(BingAdsApi::Ad, :camelcase)
-			#   # => Hash
-			#
-			# Returns:: The same hash that ad.to_hash returns plus the needed key for the Ad Type
-			def ad_to_hash(ad, keys)
-				hash = ad.to_hash(keys)
-				hash["@xsi:type"] = self.client_proxy.class::NAMESPACE.to_s + ":" + ad.class.to_s.demodulize
-				return hash
 			end
 	end
 

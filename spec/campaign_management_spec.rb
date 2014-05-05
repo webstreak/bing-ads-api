@@ -50,8 +50,20 @@ describe BingAdsApi::CampaignManagement do
 		response[:ad_group_ids][:long]
 	end
 
+	def create_text_ad(ad_group_id)
+		text_ad = BingAdsApi::TextAd.new(
+			status: BingAdsApi::Ad::ACTIVE,
+			destination_url: "http://www.adxion.com",
+			display_url: "AdXion.com",
+			text: "Text Ad #{SecureRandom.uuid}",
+			title: "Text Ad"
+		)
+		response = service.add_ads(ad_group_id, text_ad)
+		response[:ad_ids][:long]
+	end
+
 	it "should initialize with options" do
-		new_service = BingAdsApi::CampaignManagement.new(options)
+		new_service = BingAdsApi::CampaignManagement.new(default_options)
 		expect(new_service).not_to be_nil
 	end
 
@@ -113,7 +125,6 @@ describe BingAdsApi::CampaignManagement do
 			end
 
 		end
-
 	end
 
 	describe "ad group operations" do
@@ -138,7 +149,7 @@ describe BingAdsApi::CampaignManagement do
 			expect(response[:ad_group_ids][:long]).not_to be_nil
 		end
 
-		context "ad group operations" do
+		context "when an ad group has already been created" do
 
 			before :each do
 			  @ad_group_id = create_ad_group(@campaign_id)
@@ -179,7 +190,7 @@ describe BingAdsApi::CampaignManagement do
 				ad_groups = [
 					BingAdsApi::AdGroup.new(
 						id: @ad_group_id,
-						name: name + " updated name"
+						name: name
 					)
 				]
 
@@ -187,65 +198,53 @@ describe BingAdsApi::CampaignManagement do
 			end
 
 		end
-
 	end
 
 	describe "ad operations" do
 
+		before :each do
+			campaign_id = create_campaign
+			@ad_group_id = create_ad_group(campaign_id)
+		end
+
 		describe "text ads" do
 
 			it "should add a single ad" do
-				# NOPE need to manually create ad group in which to add ads
-				ad_group_id = 1980939070
-
-				date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
-
-				# TextAd
 				text_ad = BingAdsApi::TextAd.new(
-						type: BingAdsApi::Ad::TEXT,
-						status: BingAdsApi::Ad::INACTIVE,
-						destination_url: "http://www.adxion.com",
-						display_url: "AdXion.com",
-						text: "Text Ad #{date}",
-						title: "Text Ad")
+					status: BingAdsApi::Ad::ACTIVE,
+					destination_url: "http://www.adxion.com",
+					display_url: "AdXion.com",
+					text: "Text Ad #{SecureRandom.uuid}",
+					title: "Text Ad"
+				)
 
-				response = service.add_ads(ad_group_id, text_ad)
+				response = service.add_ads(@ad_group_id, text_ad)
 				expect(response).not_to be_nil
-
-				expect(response[:partial_errors]).not_to be_nil
-
+				expect(response[:partial_errors]).to be_nil
 				expect(response[:ad_ids][:long]).not_to be_nil
 			end
 
 			it "should add multiple ads" do
-				# NOPE need to manually create ad group in which to add ads
-				ad_group_id = 1980939070
-
-				date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
-
-				# TextAds
 				text_ads = [
 					BingAdsApi::TextAd.new(
-						type: BingAdsApi::Ad::TEXT,
-						status: BingAdsApi::Ad::INACTIVE,
+						status: BingAdsApi::Ad::ACTIVE,
 						destination_url: "http://www.adxion.com",
 						display_url: "AdXion.com",
-						text: "TextAd #{date}",
-						title: "TextAd"),
-
+						text: "TextAd #{SecureRandom.uuid}",
+						title: "TextAd"
+					),
 					BingAdsApi::TextAd.new(
-						type: BingAdsApi::Ad::TEXT,
-						status: BingAdsApi::Ad::INACTIVE,
+						status: BingAdsApi::Ad::ACTIVE,
 						destination_url: "http://www.adxion.com",
 						display_url: "AdXion.com",
-						text: "TextAd 2 #{date}",
-						title: "TextAd 2")
+						text: "TextAd 2 #{SecureRandom.uuid}",
+						title: "TextAd 2"
+					)
 				]
-				response = service.add_ads(ad_group_id, text_ads)
+
+				response = service.add_ads(@ad_group_id, text_ads)
 				expect(response).not_to be_nil
-
-				expect(response[:partial_errors]).not_to be_nil
-
+				expect(response[:partial_errors]).to be_nil
 				expect(response[:ad_ids][:long]).not_to be_nil
 			end
 
@@ -254,56 +253,44 @@ describe BingAdsApi::CampaignManagement do
 		describe "mobile ads" do
 
 			it "should add a single ad" do
-				# NOPE need to manually create ad group in which to add ads
-				ad_group_id = 1980939070
-
-				date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
-
-				# MobileAd
 				mobile_ad = BingAdsApi::MobileAd.new(
-						bussines_name: "Bussiness",
-						destination_url: "http://www.adxion.com",
-						display_url: "adxion.com",
-						phone_number: "555555555",
-						text: "Publish with us",
-						title: "Mobile Ad")
+					business_name: "Business",
+					destination_url: "http://www.adxion.com",
+					display_url: "adxion.com",
+					phone_number: "555555555",
+					text: "Publish with us",
+					title: "Mobile Ad"
+				)
 
-				response = service.add_ads(ad_group_id, mobile_ad)
+				response = service.add_ads(@ad_group_id, mobile_ad)
 				expect(response).not_to be_nil
-
-				expect(response[:partial_errors]).not_to be_nil
-
+				expect(response[:partial_errors]).to be_nil
 				expect(response[:ad_ids][:long]).not_to be_nil
 			end
 
 			it "should add multiple ads" do
-				# NOPE need to manually create ad group in which to add ads
-				ad_group_id = 1980939070
-
-				date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
-
 				mobile_ads = [
 					BingAdsApi::MobileAd.new(
-						bussines_name: "Bussiness 1",
+						business_name: "Business 1",
 						destination_url: "http://www.adxion.com",
 						display_url: "AdXion.com",
 						phone_number: "555555555",
 						text: "Publish with us",
-						title: "MobileAd"),
-
+						title: "MobileAd"
+					),
 					BingAdsApi::MobileAd.new(
-						bussines_name: "Bussiness 2",
+						business_name: "Business 2",
 						destination_url: "http://www.adxion.com",
 						display_url: "AdXion.com",
 						phone_number: "555555555",
 						text: "Keep publishing",
-						title: "MobileAd 2")
+						title: "MobileAd 2"
+					)
 				]
-				response = service.add_ads(ad_group_id, mobile_ads)
+
+				response = service.add_ads(@ad_group_id, mobile_ads)
 				expect(response).not_to be_nil
-
-				expect(response[:partial_errors]).not_to be_nil
-
+				expect(response[:partial_errors]).to be_nil
 				expect(response[:ad_ids][:long]).not_to be_nil
 			end
 
@@ -312,127 +299,103 @@ describe BingAdsApi::CampaignManagement do
 		describe "product ads" do
 
 			it "should add a single ad" do
-				# NOPE need to manually create ad group in which to add ads
-				ad_group_id = 1980939070
+				pending("Product ads not enabled for the test account")
 
-				date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
-
-				# ProductAd
 				product_ad = BingAdsApi::ProductAd.new(
-						promotional_text: "Promotion #{date}")
-				response = service.add_ads(ad_group_id, product_ad)
+					promotional_text: "Promotion #{SecureRandom.uuid}"
+				)
+
+				response = service.add_ads(@ad_group_id, product_ad)
 				expect(response).not_to be_nil
-
-				expect(response[:partial_errors]).not_to be_nil
-
+				expect(response[:partial_errors]).to be_nil
 				expect(response[:ad_ids][:long]).not_to be_nil
 			end
 
 			it "should add multiple ads" do
-				# NOPE need to manually create ad group in which to add ads
-				ad_group_id = 1980939070
-
-				date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
+				pending("Product ads not enabled for the test account")
 
 				product_ads = [
 					BingAdsApi::MobileAd.new(
-						promotional_text: "My Promotional text #{date}"),
-
+						promotional_text: "My Promotional text #{SecureRandom.uuid}"
+					),
 					BingAdsApi::MobileAd.new(
-						promotional_text: "My Promotional text 2 #{date}")
+						promotional_text: "My Promotional text 2 #{SecureRandom.uuid}"
+					)
 				]
-				response = service.add_ads(ad_group_id, product_ads)
+
+				response = service.add_ads(@ad_group_id, product_ads)
 				expect(response).not_to be_nil
 			end
 
 		end
 
 		it "should add an ad with partial errors" do
-			# NOPE need to manually create ad group in which to add ads
-			ad_group_id = 1980939070
-
-			date = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
 			text_ad = BingAdsApi::TextAd.new(
-					type: BingAdsApi::Ad::TEXT,
-					status: BingAdsApi::Ad::INACTIVE,
+				status: BingAdsApi::Ad::INACTIVE,
+				destination_url: "http://www.adxion.com",
+				display_url: "http://www.adxion.com",
+				text: "Text Ad #{SecureRandom.uuid}",
+				title: "Text Ad #{SecureRandom.uuid}"
+			)
+
+			response = service.add_ads(@ad_group_id, text_ad)
+			expect(response).not_to be_nil
+			expect(response[:partial_errors]).not_to be_nil
+		end
+
+		context "when an ad has already been created" do
+
+			before :each do
+			  @ad_id = create_text_ad(@ad_group_id)
+			end
+
+			it "should get ads by ad group id when there's only one ad" do
+				ads = service.get_ads_by_ad_group_id(@ad_group_id)
+				expect(ads).not_to be_empty
+				ad = ads.first
+				expect(ad).to be_kind_of(BingAdsApi::Ad)
+			end
+
+			it "should get ads by ad group id when there are multiple ads" do
+				create_text_ad(@ad_group_id)
+				ads = service.get_ads_by_ad_group_id(@ad_group_id)
+				expect(ads).not_to be_empty
+				ads.each do |ad|
+					expect(ad).to be_kind_of(BingAdsApi::Ad)
+				end
+			end
+
+			it "should get ads by ids when there's only one ad" do
+				ads_by_ids = service.get_ads_by_ids(@ad_group_id, [@ad_id])
+				expect(ads_by_ids).not_to be_nil
+				expect(ads_by_ids.size).to eq(1)
+			end
+
+			it "should get ads by ids when there are multiple ads" do
+				ad_id_2 = create_text_ad(@ad_group_id)
+				ads_by_ids = service.get_ads_by_ids(@ad_group_id, [@ad_id, ad_id_2])
+				expect(ads_by_ids).not_to be_nil
+				expect(ads_by_ids.size).to eq(2)
+				ads_by_ids.each do |ad|
+					expect(ad).to be_kind_of(BingAdsApi::Ad)
+				end
+			end
+
+			it "should update ads" do
+				text_ad = BingAdsApi::TextAd.new(
+					id: @ad_id,
+					status: BingAdsApi::Ad::ACTIVE,
 					destination_url: "http://www.adxion.com",
 					display_url: "http://www.adxion.com",
-					text: "it Text Ad #{date}",
-					title: "it Text Ad #{date}")
+					text: "Ad #{SecureRandom.uuid}",
+					title: "Title"
+				)
 
-			response = service.add_ads(ad_group_id, text_ad)
-			expect(response).not_to be_nil
-
-			expect(response[:partial_errors]).not_to be_nil
-		end
-
-		it "should get ads by group id" do
-			# need to manually create ads in an ad group and pull them
-			campaigns = service.get_campaigns_by_account_id(default_options[:account_id])
-			expect(campaigns).not_to be_empty
-			campaign_id = campaigns.first.id
-
-			ad_group = service.get_ad_groups_by_campaign_id(campaign_id).first
-
-			ads = service.get_ads_by_ad_group_id(ad_group.id)
-			expect(ads).not_to be_empty
-			ads.each do |ad|
-				expect(ad).to be_kind_of(BingAdsApi::Ad)
-			end
-		end
-
-		it "should get ads by ids" do
-			# need to manually create ads
-			ad_group_id = 1980939070
-			ads = service.get_ads_by_ad_group_id(ad_group_id)
-			expect(ads).not_to be_nil
-			expect(ads).not_to be_empty
-
-			# Get 2 ads
-			ad_ids = [ads[0].id, ads[1].id]
-			ads_by_ids = service.get_ads_by_ids(ad_group_id, ad_ids)
-			expect(ads_by_ids).not_to be_nil
-			expect(ads_by_ids).not_to be_empty
-			expect(ad_ids.size).to eq(ads_by_ids.size)
-			ads.each do |ad|
-				expect(ad).to be_kind_of(BingAdsApi::Ad)
+				response = service.update_ads(@ad_group_id, [text_ad])
+				expect(response).not_to be_nil
+				expect(response[:partial_errors]).to be_nil
 			end
 
-			# Get specific ad
-			ad_ids = [ads[0].id]
-			ads_by_ids = service.get_ads_by_ids(ad_group_id, ad_ids)
-			expect(ads_by_ids).not_to be_nil
-			expect(ads).not_to be_empty
-			expect(ad_ids.size).to eq(ads_by_ids.size)
-		end
-
-		it "should update ads" do
-			# need to manually create ads
-			ad_group_id = 1980939070
-			# One TextAd and one MobileAd
-			ad_ids = [4560003693, 4560003694]
-
-			ads = service.get_ads_by_ids(ad_group_id, ad_ids)
-
-			# Loop to modify something in the adds
-			ads.each do |ad|
-				case ad.type
-				when "Text"
-					ad.text = ad.text + " updated"
-				when "Mobile"
-					ad.phone_number = 1234567890
-				when "Product"
-					ad.promotional_text = ad.promotional_text + " edit"
-				end
-				ad.status = nil
-				ad.editorial_status = nil
-			end
-
-			response = service.update_ads(ad_group_id, ads)
-			expect(response).not_to be_nil
-
-			expect(response[:partial_errors]).not_to be_nil
 		end
 	end
-
 end
