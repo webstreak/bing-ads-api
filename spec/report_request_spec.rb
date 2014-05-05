@@ -4,43 +4,42 @@ require 'spec_helper'
 # Author:: jlopezn@neonline.cl
 describe BingAdsApi::ReportRequest do
 
-	before :all do
-		@config = BingAdsApi::Config.instance
-		@options = {
-			:environment => :sandbox,
-			:username => "ruby_bing_ads_sbx",
-			:password => "sandbox123",
-			:developer_token => "BBD37VB98",
-			:customer_id => "21025739",
-			:account_id => "8506945"
+	let(:default_options) do
+		{
+			environment: :sandbox,
+			username: "ruby_bing_ads_sbx",
+			password: "sandbox123",
+			developer_token: "BBD37VB98",
+			customer_id: "21025739",
+			account_id: "8506945"
 		}
-		@service = BingAdsApi::Reporting.new(@options)
 	end
+	let(:service) { BingAdsApi::Reporting.new(default_options) }
 
-	it "truth" do
-		expect(BingAdsApi).to be_kind_of(Module)
-	end
+	describe "#initialize" do
+		it "should initialize when valid parameters are provided" do
+			expect{
+				report_request = BingAdsApi::ReportRequest.new(:format => :xml,
+					:language => :english, :report_name => "My Report",
+					:return_only_complete_data => true)
+			}.not_to raise_error
+		end
 
-	it "initialize report request" do
-		expect{
-			report_request = BingAdsApi::ReportRequest.new(:format => :xml,
-				:language => :english, :report_name => "My Report",
-				:return_only_complete_data => true)
-		}.not_to raise_error
-	end
+		it "should raise an exception when an invalid format is provided" do
+			expect{
+				report_request = BingAdsApi::ReportRequest.new(:format => :invalid,
+					:language => :english, :report_name => "My Report",
+					:return_only_complete_data => true)
+			}.to raise_error
+		end
 
-	it "should raise exception" do
-		expect{
-			report_request = BingAdsApi::ReportRequest.new(:format => :invalid,
-				:language => :english, :report_name => "My Report",
-				:return_only_complete_data => true)
-		}.to raise_error
-
-		expect{
-			report_request = BingAdsApi::ReportRequest.new(:format => :xml,
-				:language => :swahili, :report_name => "My Report",
-				:return_only_complete_data => true)
-		}.to raise_error
+		it "should raise an exception when an invalid language is provided" do
+			expect{
+				report_request = BingAdsApi::ReportRequest.new(:format => :xml,
+					:language => :swahili, :report_name => "My Report",
+					:return_only_complete_data => true)
+			}.to raise_error
+		end
 	end
 
 	it "initialize performance report request" do
