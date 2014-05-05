@@ -16,5 +16,25 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  #config.order = 'random'
+  config.order = 'random'
+
+  config.after(:all) do
+    # Clean up everything
+    account_id = "8506945"
+    service = BingAdsApi::CampaignManagement.new(
+      environment: :sandbox,
+      username: "ruby_bing_ads_sbx",
+      password: "sandbox123",
+      developer_token: "BBD37VB98",
+      customer_id: "21025739",
+      account_id: account_id
+    )
+    campaign_ids = service.get_campaigns_by_account_id(account_id).map do |c|
+      c.id
+    end
+
+    campaign_ids.each_slice(100) do |ids|
+      service.delete_campaigns(account_id, ids)
+    end
+  end
 end
