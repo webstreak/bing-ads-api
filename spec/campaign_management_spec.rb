@@ -4,7 +4,6 @@ require 'spec_helper'
 # Author:: jlopezn@neonline.cl
 describe BingAdsApi::CampaignManagement do
 
-	let(:config) { BingAdsApi::Config.instance }
 	let(:default_options) do
 		{
 			environment: :sandbox,
@@ -35,6 +34,8 @@ describe BingAdsApi::CampaignManagement do
 		response[:campaign_ids][:long]
 	end
 
+	# Helper method to create an ad group on the remote API. Returns the created
+	# ad group id.
 	def create_ad_group(campaign_id)
 		name = "Ad Group #{SecureRandom.uuid}"
 		ad_groups = [
@@ -50,6 +51,7 @@ describe BingAdsApi::CampaignManagement do
 		response[:ad_group_ids][:long]
 	end
 
+	# Helper method to create an ad on the remote API. Returns the created ad id.
 	def create_text_ad(ad_group_id)
 		text_ad = BingAdsApi::TextAd.new(
 			status: BingAdsApi::Ad::ACTIVE,
