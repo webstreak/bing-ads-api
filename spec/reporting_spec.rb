@@ -16,32 +16,13 @@ describe BingAdsApi::Reporting do
 	end
 	let(:service) { BingAdsApi::Reporting.new(default_options) }
 
-	# Helper method to create a campaign on the remote API. Returns the created
-	# campaign id.
-	def create_campaign
-		name = "Test Campaign #{SecureRandom.uuid}"
-		campaigns = [
-			BingAdsApi::Campaign.new(
-				budget_type: BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
-				daily_budget: 2000,
-				daylight_saving: "false",
-				description: name + " description",
-				name: name + " name",
-				time_zone: BingAdsApi::Campaign::SANTIAGO
-			)
-		]
-		management_service = BingAdsApi::CampaignManagement.new(default_options)
-		response = management_service.add_campaigns(default_options[:account_id], campaigns)
-		response[:campaign_ids][:long]
-	end
-
 	it "should initialize with options" do
 		new_service = BingAdsApi::Reporting.new(default_options)
 		expect(new_service).not_to be_nil
 	end
 
 	it "should submit campaign performance report" do
-		campaign_id = create_campaign
+		campaign_id = BingAdsFactory.create_campaign
 		report_request = BingAdsApi::CampaignPerformanceReportRequest.new(
 			:format => :xml,
 			:language => :english,

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe BingAdsApi::CampaignPerformanceReportRequest
+describe BingAdsApi::CampaignPerformanceReportRequest do
   it "should initialize campaign performance report request" do
     expect{
       performance_report_request = BingAdsApi::CampaignPerformanceReportRequest.new(:format => :xml,

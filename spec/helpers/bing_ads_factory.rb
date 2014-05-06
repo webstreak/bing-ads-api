@@ -1,0 +1,66 @@
+class BingAdsFactory
+
+  # Helper method to create a campaign on the remote API. Returns the created
+  # campaign id.
+  def self.create_campaign
+    name = "Test Campaign #{SecureRandom.uuid}"
+    campaigns = [
+      BingAdsApi::Campaign.new(
+        budget_type: BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
+        daily_budget: 2000,
+        daylight_saving: "false",
+        description: name + " description",
+        name: name + " name",
+        time_zone: BingAdsApi::Campaign::SANTIAGO
+      )
+    ]
+    response = service.add_campaigns(account_id, campaigns)
+    response[:campaign_ids][:long]
+  end
+
+  # Helper method to create an ad group on the remote API. Returns the created
+  # ad group id.
+  def self.create_ad_group(campaign_id)
+    name = "Ad Group #{SecureRandom.uuid}"
+    ad_groups = [
+      BingAdsApi::AdGroup.new(
+        ad_distribution: BingAdsApi::AdGroup::SEARCH,
+        language: BingAdsApi::AdGroup::SPANISH,
+        name: name + " name",
+        pricing_model: BingAdsApi::AdGroup::CPC,
+        bidding_model: BingAdsApi::AdGroup::KEYWORD
+      )
+    ]
+    response = service.add_ad_groups(campaign_id, ad_groups)
+    response[:ad_group_ids][:long]
+  end
+
+  # Helper method to create an ad on the remote API. Returns the created ad id.
+  def self.create_text_ad(ad_group_id)
+    text_ad = BingAdsApi::TextAd.new(
+      status: BingAdsApi::Ad::ACTIVE,
+      destination_url: "http://www.adxion.com",
+      display_url: "AdXion.com",
+      text: "Text Ad #{SecureRandom.uuid}",
+      title: "Text Ad"
+    )
+    response = service.add_ads(ad_group_id, text_ad)
+    response[:ad_ids][:long]
+  end
+
+  def self.service
+    @service ||= BingAdsApi::CampaignManagement.new(
+      environment: :sandbox,
+      username: "ruby_bing_ads_sbx",
+      password: "sandbox123",
+      developer_token: "BBD37VB98",
+      customer_id: "21025739",
+      account_id: account_id
+    )
+  end
+
+  def self.account_id
+    "8506945"
+  end
+
+end

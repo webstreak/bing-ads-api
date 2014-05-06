@@ -16,54 +16,6 @@ describe BingAdsApi::CampaignManagement do
 	end
 	let(:service) { BingAdsApi::CampaignManagement.new(default_options) }
 
-	# Helper method to create a campaign on the remote API. Returns the created
-	# campaign id.
-	def create_campaign
-		name = "Test Campaign #{SecureRandom.uuid}"
-		campaigns = [
-			BingAdsApi::Campaign.new(
-				budget_type: BingAdsApi::Campaign::DAILY_BUDGET_STANDARD,
-				daily_budget: 2000,
-				daylight_saving: "false",
-				description: name + " description",
-				name: name + " name",
-				time_zone: BingAdsApi::Campaign::SANTIAGO
-			)
-		]
-		response = service.add_campaigns(default_options[:account_id], campaigns)
-		response[:campaign_ids][:long]
-	end
-
-	# Helper method to create an ad group on the remote API. Returns the created
-	# ad group id.
-	def create_ad_group(campaign_id)
-		name = "Ad Group #{SecureRandom.uuid}"
-		ad_groups = [
-			BingAdsApi::AdGroup.new(
-				ad_distribution: BingAdsApi::AdGroup::SEARCH,
-				language: BingAdsApi::AdGroup::SPANISH,
-				name: name + " name",
-				pricing_model: BingAdsApi::AdGroup::CPC,
-				bidding_model: BingAdsApi::AdGroup::KEYWORD
-			)
-		]
-		response = service.add_ad_groups(campaign_id, ad_groups)
-		response[:ad_group_ids][:long]
-	end
-
-	# Helper method to create an ad on the remote API. Returns the created ad id.
-	def create_text_ad(ad_group_id)
-		text_ad = BingAdsApi::TextAd.new(
-			status: BingAdsApi::Ad::ACTIVE,
-			destination_url: "http://www.adxion.com",
-			display_url: "AdXion.com",
-			text: "Text Ad #{SecureRandom.uuid}",
-			title: "Text Ad"
-		)
-		response = service.add_ads(ad_group_id, text_ad)
-		response[:ad_ids][:long]
-	end
-
 	it "should initialize with options" do
 		new_service = BingAdsApi::CampaignManagement.new(default_options)
 		expect(new_service).not_to be_nil
@@ -91,7 +43,7 @@ describe BingAdsApi::CampaignManagement do
 		context "when a campaign has already been created" do
 
 			before :each do
-				@campaign_id = create_campaign
+				@campaign_id = BingAdsFactory.create_campaign
 			end
 
 			it "should get campaigns by account when there's only one campaign" do
@@ -101,7 +53,7 @@ describe BingAdsApi::CampaignManagement do
 			end
 
 			it "should get campaigns by account when there are multiple campaigns" do
-				create_campaign
+				BingAdsFactory.create_campaign
 				response = service.get_campaigns_by_account_id(default_options[:account_id])
 				expect(response).not_to be_nil
 				expect(response).to be_kind_of(Array)
@@ -140,7 +92,7 @@ describe BingAdsApi::CampaignManagement do
 	describe "ad group operations" do
 
 		before :each do
-			@campaign_id = create_campaign
+			@campaign_id = BingAdsFactory.create_campaign
 		end
 
 		it "should add an ad group" do
@@ -162,7 +114,7 @@ describe BingAdsApi::CampaignManagement do
 		context "when an ad group has already been created" do
 
 			before :each do
-			  @ad_group_id = create_ad_group(@campaign_id)
+			  @ad_group_id = BingAdsFactory.create_ad_group(@campaign_id)
 			end
 
 			it "should get ad groups by campaign when there's only one ad group" do
@@ -173,7 +125,7 @@ describe BingAdsApi::CampaignManagement do
 			end
 
 			it "should get ad groups by campaign when there are multiple ad groups" do
-				create_ad_group(@campaign_id)
+				BingAdsFactory.create_ad_group(@campaign_id)
 				response = service.get_ad_groups_by_campaign_id(@campaign_id)
 
 				expect(response).not_to be_empty
@@ -188,7 +140,7 @@ describe BingAdsApi::CampaignManagement do
 			end
 
 			it "should get ad groups by ids when there are multiple ad groups" do
-				ad_group_id_2 = create_ad_group(@campaign_id)
+				ad_group_id_2 = BingAdsFactory.create_ad_group(@campaign_id)
 				response = service.get_ad_groups_by_ids(@campaign_id, [@ad_group_id, ad_group_id_2])
 
 				expect(response).not_to be_nil
@@ -213,8 +165,8 @@ describe BingAdsApi::CampaignManagement do
 	describe "ad operations" do
 
 		before :each do
-			campaign_id = create_campaign
-			@ad_group_id = create_ad_group(campaign_id)
+			campaign_id = BingAdsFactory.create_campaign
+			@ad_group_id = BingAdsFactory.create_ad_group(campaign_id)
 		end
 
 		describe "text ads" do
@@ -356,7 +308,7 @@ describe BingAdsApi::CampaignManagement do
 		context "when an ad has already been created" do
 
 			before :each do
-			  @ad_id = create_text_ad(@ad_group_id)
+			  @ad_id = BingAdsFactory.create_text_ad(@ad_group_id)
 			end
 
 			it "should get ads by ad group id when there's only one ad" do
@@ -367,7 +319,7 @@ describe BingAdsApi::CampaignManagement do
 			end
 
 			it "should get ads by ad group id when there are multiple ads" do
-				create_text_ad(@ad_group_id)
+				BingAdsFactory.create_text_ad(@ad_group_id)
 				ads = service.get_ads_by_ad_group_id(@ad_group_id)
 				expect(ads).not_to be_empty
 				ads.each do |ad|
@@ -382,7 +334,7 @@ describe BingAdsApi::CampaignManagement do
 			end
 
 			it "should get ads by ids when there are multiple ads" do
-				ad_id_2 = create_text_ad(@ad_group_id)
+				ad_id_2 = BingAdsFactory.create_text_ad(@ad_group_id)
 				ads_by_ids = service.get_ads_by_ids(@ad_group_id, [@ad_id, ad_id_2])
 				expect(ads_by_ids).not_to be_nil
 				expect(ads_by_ids.size).to eq(2)
