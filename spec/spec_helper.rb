@@ -30,6 +30,7 @@ RSpec.configure do |config|
       account_id: account_id
     )
     campaign_ids = service.get_campaigns_by_account_id(account_id).map do |c|
+      p c
       c.id
     end
 

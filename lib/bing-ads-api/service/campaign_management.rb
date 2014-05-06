@@ -62,7 +62,8 @@ module BingAdsApi
 			response = call(:get_campaigns_by_account_id,
 				{account_id: account_id})
 			response_hash = get_response_hash(response, __method__)
-			campaigns = response_hash[:campaigns][:campaign].map do |camp_hash|
+			response_campaigns = [response_hash[:campaigns][:campaign]].flatten
+			campaigns = response_campaigns.map do |camp_hash|
 				BingAdsApi::Campaign.new(camp_hash)
 			end
 			return campaigns
