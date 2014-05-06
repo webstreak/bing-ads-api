@@ -32,7 +32,7 @@ module BingAdsApi
 
 
 		# Public: Convert this object's attributes into hash format. It will
-		# automatically force the order to place :id first if :id is present.
+		# automatically apply key ordering.
 		#
 		# Author:: alex.cavalli@offers.com
 		#
@@ -43,7 +43,7 @@ module BingAdsApi
 		# * :underscore - underscore_case
 		def to_hash(keys_case=:underscore)
 			hash = super
-			elevate_id(hash) if hash["Id"]
+			apply_order(hash)
 			hash
 		end
 
@@ -51,17 +51,27 @@ module BingAdsApi
 
 
 		# Internal: Add an :order! key to the hash pointing to an array of all the
-		# other keys in the hash with :id first.
+		# keys in the hash according to the order from the config file.
 		#
 		# Author: alex.cavalli@offers.com
 		#
 		# === Parameters
 		# * +hash+ - the hash to apply an id-elevated order to
-		def elevate_id(hash)
-			keys = hash.keys
-			keys.delete("Id")
-			keys.unshift("Id")
-			hash[:order!] = keys
+		def apply_order(hash)
+			key_order = get_key_order
+			return if key_order.empty?
+			key_order = key_order.map { |key| key.to_s.camelcase }
+			key_order = key_order & hash.keys # remove keys from order not present in hash
+			hash[:order!] = key_order
+		end
+
+
+		# Internal: Retrieve the ordered array of keys corresponding to this data
+		# object. Should be overriden by children.
+		#
+		# Author: alex.cavalli@offers.com
+		def get_key_order
+			[]
 		end
 
 	end

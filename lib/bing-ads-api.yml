@@ -187,7 +187,7 @@ constants:
       inactive: "Inactive"
       pause: "Pause"
       pending: "Pending"
-  # Constants specific for reporting services 
+  # Constants specific for reporting services
   reporting:
     format:
       csv: 'Csv'
@@ -353,3 +353,69 @@ constants:
         device_os: "DeviceOS"
         device_type: "DeviceType"
         status: "Status"
+
+# All data object attribute orderings are here
+orders:
+  campaign_management:
+    ad:
+      - device_preference
+      - editorial_status
+      - forward_compatibility_map
+      - id
+      - status
+      - type
+    ad_group:
+      - ad_distribution
+      - ad_rotation
+      - bidding_model
+      - broad_match_bid
+      - content_match_bid
+      - end_date
+      - exact_match_bid
+      - forward_compatibility_map
+      - id
+      - language
+      - name
+      - network
+      - phrase_match_bid
+      - pricing_model
+      - start_date
+      - status
+    campaign:
+      - budget_type
+      - conversion_tracking_enabled
+      - daily_budget
+      - daylight_saving
+      - description
+      - forward_compatibility_map
+      - id
+      - monthly_budget
+      - name
+      - status
+      - time_zone
+    mobile_ad:
+      - business_name
+      - destination_url
+      - display_url
+      - phone_number
+      - text
+      - title
+    product_ad:
+      - promotional_text
+    text_ad:
+      - destination_url
+      - display_url
+      - text
+      - title
+  reporting:
+    report_request:
+      - format
+      - language
+      - report_name
+      - return_only_complete_data
+      - aggregation
+      - columns
+      - filter
+      - scope
+      - time
+

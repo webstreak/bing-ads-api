@@ -24,6 +24,17 @@ module BingAdsApi
 			:status,
 			:type
 
+		private
+
+			# Internal: Retrieve the ordered array of keys corresponding to this data
+			# object.
+			#
+			# Author: alex.cavalli@offers.com
+			def get_key_order
+				super.concat(BingAdsApi::Config.instance.
+					campaign_management_orders['ad'])
+			end
+
 	end
 
 	##
@@ -52,6 +63,18 @@ module BingAdsApi
 			hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:TextAd"
 			return hash
 		end
+
+		private
+
+			# Internal: Retrieve the ordered array of keys corresponding to this data
+			# object.
+			#
+			# Author: alex.cavalli@offers.com
+			def get_key_order
+				super.concat(BingAdsApi::Config.instance.
+					campaign_management_orders['text_ad'])
+			end
+
 	end
 
 
@@ -85,6 +108,17 @@ module BingAdsApi
 			return hash
 		end
 
+		private
+
+			# Internal: Retrieve the ordered array of keys corresponding to this data
+			# object.
+			#
+			# Author: alex.cavalli@offers.com
+			def get_key_order
+				super.concat(BingAdsApi::Config.instance.
+					campaign_management_orders['mobile_ad'])
+			end
+
 	end
 
 
@@ -111,6 +145,17 @@ module BingAdsApi
 			hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:ProductAd"
 			return hash
 		end
+
+		private
+
+			# Internal: Retrieve the ordered array of keys corresponding to this data
+			# object.
+			#
+			# Author: alex.cavalli@offers.com
+			def get_key_order
+				super.concat(BingAdsApi::Config.instance.
+					campaign_management_orders['product_ad'])
+			end
 
 	end
 
