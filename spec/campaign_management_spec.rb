@@ -360,4 +360,116 @@ describe BingAdsApi::CampaignManagement do
 
 		end
 	end
+
+	describe "keyword operations" do
+
+		before :each do
+			campaign_id = BingAdsFactory.create_campaign
+			@ad_group_id = BingAdsFactory.create_ad_group(campaign_id)
+		end
+
+		it "should add a single keyword" do
+			keyword = BingAdsApi::Keyword.new(
+				bid: BingAdsApi::Bid.new(amount: 1.23),
+				destination_url: "http://www.adxion.com",
+				match_type: BingAdsApi::Keyword::EXACT,
+				status: BingAdsApi::Keyword::ACTIVE,
+				text: "Keyword #{SecureRandom.uuid}"
+			)
+
+			response = service.add_keywords(@ad_group_id, keyword)
+			expect(response).not_to be_nil
+			expect(response[:partial_errors]).to be_nil
+			expect(response[:keyword_ids][:long]).not_to be_nil
+		end
+
+		it "should add multiple keywords" do
+			keywords = [
+				BingAdsApi::Keyword.new(
+					bid: BingAdsApi::Bid.new(amount: 1.23),
+					destination_url: "http://www.adxion.com",
+					match_type: BingAdsApi::Keyword::EXACT,
+					status: BingAdsApi::Keyword::ACTIVE,
+					text: "Keyword #{SecureRandom.uuid}"
+				),
+				BingAdsApi::Keyword.new(
+					bid: BingAdsApi::Bid.new(amount: 1.23),
+					destination_url: "http://www.adxion.com",
+					match_type: BingAdsApi::Keyword::EXACT,
+					status: BingAdsApi::Keyword::ACTIVE,
+					text: "Keyword #{SecureRandom.uuid}"
+				)
+			]
+
+			response = service.add_keywords(@ad_group_id, keywords)
+			expect(response).not_to be_nil
+			expect(response[:partial_errors]).to be_nil
+			expect(response[:keyword_ids][:long]).not_to be_nil
+		end
+
+		it "should add a keyword with partial errors" do
+			keyword = BingAdsApi::Keyword.new(
+				bid: BingAdsApi::Bid.new(amount: 1.23),
+				destination_url: "http:com", # invalid URL
+				match_type: BingAdsApi::Keyword::EXACT,
+				status: BingAdsApi::Keyword::ACTIVE,
+				text: "Keyword #{SecureRandom.uuid}"
+			)
+
+			response = service.add_keywords(@ad_group_id, keyword)
+			expect(response).not_to be_nil
+			expect(response[:partial_errors]).not_to be_nil
+		end
+
+		context "when a keyword has already been created" do
+
+			before :each do
+			  @keyword_id = BingAdsFactory.create_keyword(@ad_group_id)
+			end
+
+			it "should get keywords by ad group id when there's only one keyword" do
+				keywords = service.get_keywords_by_ad_group_id(@ad_group_id)
+				expect(keywords).not_to be_empty
+				keyword = keywords.first
+				expect(keyword).to be_kind_of(BingAdsApi::Keyword)
+			end
+
+			it "should get keywords by ad group id when there are multiple keywords" do
+				BingAdsFactory.create_keyword(@ad_group_id)
+				keywords = service.get_keywords_by_ad_group_id(@ad_group_id)
+				expect(keywords).not_to be_empty
+				keywords.each do |keyword|
+					expect(keyword).to be_kind_of(BingAdsApi::Keyword)
+				end
+			end
+
+			it "should get keywords by ids when there's only one keyword" do
+				keywords_by_ids = service.get_keywords_by_ids(@ad_group_id, [@keyword_id])
+				expect(keywords_by_ids).not_to be_nil
+				expect(keywords_by_ids.size).to eq(1)
+			end
+
+			it "should get keywords by ids when there are multiple keywords" do
+				keyword_id_2 = BingAdsFactory.create_keyword(@ad_group_id)
+				keywords_by_ids = service.get_keywords_by_ids(@ad_group_id, [@keyword_id, keyword_id_2])
+				expect(keywords_by_ids).not_to be_nil
+				expect(keywords_by_ids.size).to eq(2)
+				keywords_by_ids.each do |keyword|
+					expect(keyword).to be_kind_of(BingAdsApi::Keyword)
+				end
+			end
+
+			it "should update keywords" do
+				keyword = BingAdsApi::Keyword.new(
+					id: @keyword_id,
+					bid: BingAdsApi::Bid.new(amount: 99.99)
+				)
+
+				response = service.update_keywords(@ad_group_id, [keyword])
+				expect(response).not_to be_nil
+				expect(response[:partial_errors]).to be_nil
+			end
+
+		end
+	end
 end

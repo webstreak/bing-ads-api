@@ -48,6 +48,20 @@ class BingAdsFactory
     response[:ad_ids][:long]
   end
 
+  # Helper method to create a keyword on the remote API. Returns the created
+  # keyword id.
+  def self.create_keyword(ad_group_id)
+    keyword = BingAdsApi::Keyword.new(
+      bid: BingAdsApi::Bid.new(amount: 1.23),
+      destination_url: "http://www.adxion.com",
+      match_type: BingAdsApi::Keyword::EXACT,
+      status: BingAdsApi::Keyword::ACTIVE,
+      text: "Keyword #{SecureRandom.uuid}"
+    )
+    response = service.add_keywords(ad_group_id, keyword)
+    response[:keyword_ids][:long]
+  end
+
   def self.service
     @service ||= BingAdsApi::CampaignManagement.new(
       environment: :sandbox,

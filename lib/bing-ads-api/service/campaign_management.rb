@@ -455,6 +455,157 @@ module BingAdsApi
 		end
 
 
+		# Public: Obtains all the keywords associated to the specified ad group
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# ad_group_id - long with the ad group id
+		#
+		# === Examples
+		#   service.get_keywords_by_ad_group_id(1)
+		#   # => [<BingAdsApi::Keyword]
+		#
+		# Returns:: An array of BingAdsApi::Keyword
+		#
+		# Raises:: exception
+		def get_keywords_by_ad_group_id(ad_group_id)
+			response = call(:get_keywords_by_ad_group_id,
+				{ad_group_id: ad_group_id}
+			)
+			response_hash = get_response_hash(response, __method__)
+			response_keywords = [response_hash[:keywords][:keyword]].flatten
+			keywords = response_keywords.map do |keyword_hash|
+				BingAdsApi::Keyword.new(keyword_hash)
+			end
+			return keywords
+		end
+
+
+		# Public: Obtains the keywords indicated in keywords_ids associated with the specified ad group
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# ad_group_id - long with the ad group id
+		# keyword_ids - an Array of keyword ids that are associated with the ad_group_id provided
+		#
+		# === Examples
+		#   service.get_keywords_by_ids(1, [1,2,3])
+		#   # => [<BingAdsApi::Keyword>, <BingAdsApi::Keyword>, <BingAdsApi::Keyword>]
+		#
+		# Returns:: An array of BingAdsApi::Keyword
+		#
+		# Raises:: exception
+		def get_keywords_by_ids(ad_group_id, keyword_ids)
+			message = {
+				:ad_group_id => ad_group_id,
+				:keyword_ids => {"ins1:long" => keyword_ids} }
+			response = call(:get_keywords_by_ids, message)
+			response_hash = get_response_hash(response, __method__)
+			response_keywords = [response_hash[:keywords][:keyword]].flatten
+			keywords = response_keywords.map do |keyword_hash|
+				BingAdsApi::Keyword.new(keyword_hash)
+			end
+			return keywords
+		end
+
+
+		# Public: Add keywords into a specified ad group
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# ad_group_id - id of the ad group to add keywords to
+		# keywords - an array of BingAdsApi::Keyword instances
+		#
+		# === Examples
+		#   # if the operation returns partial errors
+		#   service.add_keywords(1, [BingAdsApi::Keyword])
+		#   # => {:keyword_ids => [], :partial_errors => BingAdsApi::PartialErrors }
+		#
+		#   # if the operation doesn't return partial errors
+		#   service.add_keywords(1, [BingAdsApi::Keyword])
+		#   # => {:keyword_ids => [] }
+		#
+		# Returns:: Hash with the AddKeywordsResponse structure.
+		# If the operation returns 'PartialErrors' key,
+		# this methods returns those errors as an BingAdsApi::PartialErrors
+		# instance
+		#
+		# Raises:: exception
+		def add_keywords(ad_group_id, keywords)
+			keywords_for_soap = []
+			if keywords.is_a? Array
+				keywords_for_soap = keywords.map{ |keyword| keyword.to_hash(:camelcase) }
+			elsif keywords.is_a? BingAdsApi::Keyword
+				keywords_for_soap = keywords.to_hash(:camelcase)
+			else
+				raise "keywords must be an array or instance of BingAdsApi::Keyword"
+			end
+			message = {
+				:ad_group_id => ad_group_id,
+				:keywords => {:keyword => keywords_for_soap} }
+			response = call(:add_keywords, message)
+
+			response_hash = get_response_hash(response, __method__)
+
+			# Checks if there are partial errors in the request
+			if response_hash[:partial_errors].key?(:batch_error)
+				partial_errors = BingAdsApi::PartialErrors.new(
+					response_hash[:partial_errors])
+				response_hash[:partial_errors] = partial_errors
+			else
+				response_hash.delete(:partial_errors)
+			end
+
+			return response_hash
+		end
+
+
+		# Public: Updates keywords for the specified ad group
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# ad_group_id - long with the ad group id
+		# keywords - array of BingAdsApi::Keyword instances to update
+		#
+		# === Examples
+		#   service.update_keywords(1, [<BingAdsApi::Keyword>])
+		#   # => Hash
+		#
+		# Returns:: Hash with the UpdateKeywordsResponse structure
+		#
+		# Raises:: exception
+		def update_keywords(ad_group_id, keywords)
+			keywords_for_soap = []
+			if keywords.is_a? Array
+				keywords_for_soap = keywords.map{ |keyword| keyword.to_hash(:camelcase) }
+			elsif keywords.is_a? BingAdsApi::Keyword
+				keywords_for_soap = keyword.to_hash(:camelcase)
+			else
+				raise "keywords must be an array or instance of BingAdsApi::Keyword"
+			end
+			message = {
+				:ad_group_id => ad_group_id,
+				:keywords => {:keyword => keywords_for_soap} }
+			response = call(:update_keywords, message)
+
+			response_hash = get_response_hash(response, __method__)
+
+			# Checks if there are partial errors in the request
+			if response_hash[:partial_errors].key?(:batch_error)
+				partial_errors = BingAdsApi::PartialErrors.new(
+					response_hash[:partial_errors])
+				response_hash[:partial_errors] = partial_errors
+			else
+				response_hash.delete(:partial_errors)
+			end
+
+			return response_hash
+		end
+
 		private
 			def get_service_name
 				"campaign_management"

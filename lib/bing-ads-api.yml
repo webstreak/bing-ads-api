@@ -179,6 +179,11 @@ constants:
       paused: 'Paused'
       deleted: 'Deleted'
       inactive: 'Inactive'
+    match_types:
+      broad: 'Broad'
+      content: 'Content'
+      exact: 'Exact'
+      phrase: 'Phrase'
   # Constants specific for customer management
   customer_management:
     account_life_cycle_statuses:
@@ -393,6 +398,18 @@ orders:
       - name
       - status
       - time_zone
+    keyword:
+      - bid
+      - destination_url
+      - editorial_status
+      - forward_compatibility_map
+      - id
+      - match_type
+      - param1
+      - param2
+      - param3
+      - status
+      - text
     mobile_ad:
       - business_name
       - destination_url
