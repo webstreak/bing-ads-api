@@ -202,9 +202,9 @@ constants:
       english: 'English'
       french: 'French'
     request_status_type:
-      Error: 'Error'
-      Success: 'Success'
-      Pending: 'Pending'
+      error: 'Error'
+      success: 'Success'
+      pending: 'Pending'
     aggregation:
       summary: 'Summary'
       hourly: 'Hourly'
@@ -408,7 +408,7 @@ constants:
         cost_per_conversion: "CostPerConversion"
         average_cpm: "AverageCpm"
         pricing_model: "PricingModel"
-        BidMatchType: "BidMatchType"
+        bid_match_type: "BidMatchType"
         device_type: "DeviceType"
         quality_score: "QualityScore"
         keyword_relevance: "KeywordRelevance"
