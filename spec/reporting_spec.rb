@@ -63,6 +63,45 @@ describe BingAdsApi::Reporting do
 		expect(report_request_id).not_to be_nil
 	end
 
+	it "should submit keyword performance report" do
+		campaign_id = BingAdsFactory.create_campaign
+		report_request = BingAdsApi::KeywordPerformanceReportRequest.new(
+      :format   => :xml,
+      :language => :english,
+      :report_name => "Me report",
+      :aggregation => :hourly,
+      :columns => [:account_name, :account_number, :time_period, :keyword, :spend],
+      # The filter is specified as a hash
+      :filter => {
+        # specifies the Bing expected String value
+        :ad_distribution => "Search",
+        :ad_type => "Text",
+        :bid_match_type => "Exact",
+        :delivered_match_type => "Exact",
+        # specifies criteria as a snake case symbol
+        :device_type => :tablet,
+        :keyword_relevance => [3],
+        :landing_page_relevance => [2],
+        :landing_page_user_experience => [2],
+        :language_code => ["EN"],
+        :quality_score => [7,8,9,10] },
+      :max_rows => 10,
+      :scope => {
+        :account_ids => default_options[:account_id],
+				:campaigns => []
+			},
+      # predefined date
+      :time => :this_week
+		)
+
+		report_request_id = nil
+		expect{
+			report_request_id = service.submit_generate_report(report_request)
+		}.not_to raise_error
+
+		expect(report_request_id).not_to be_nil
+	end
+
 	it "should submit account performance report" do
 		report_request = BingAdsApi::AccountPerformanceReportRequest.new(
 			:format => :xml,
