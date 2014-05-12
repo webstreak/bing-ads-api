@@ -110,7 +110,7 @@ module BingAdsApi
 			hash[get_attribute_key('filter', keys)] =
 				filter_to_hash(FILTERS, keys)
 			hash[get_attribute_key('scope', keys)] = scope_to_hash(keys)
-			hash[get_attribute_key('max_rows', keys)] = max_rows
+			hash[get_attribute_key('max_rows', keys)] = max_rows if max_rows
 			hash[get_attribute_key('sort', keys)] = sort_to_hash(keys) if sort
 			hash["@xsi:type"] = type_attribute_for_soap
 			return hash
