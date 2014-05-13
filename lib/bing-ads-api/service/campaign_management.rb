@@ -468,7 +468,6 @@ module BingAdsApi
 				{ad_group_id: ad_group_id}
 			)
 			response_hash = get_response_hash(response, __method__)
-			p response_hash
 			response_keywords = [response_hash[:keywords][:keyword]].flatten.compact
 			keywords = response_keywords.map do |keyword_hash|
 				BingAdsApi::Keyword.new(keyword_hash)
