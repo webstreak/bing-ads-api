@@ -41,6 +41,12 @@ describe BingAdsApi::CampaignManagement do
 		end
 
 		it "should get campaigns by account when there are no campaigns" do
+			# clean all campaigns first
+	    campaign_ids = service.get_campaigns_by_account_id(default_options[:account_id]).map(&:id)
+	    campaign_ids.each_slice(100) do |ids|
+	      service.delete_campaigns(default_options[:account_id], ids)
+	    end
+
 			response = service.get_campaigns_by_account_id(default_options[:account_id])
 			expect(response).to be_kind_of(Array)
 			expect(response).to be_empty

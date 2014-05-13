@@ -30,10 +30,7 @@ RSpec.configure do |config|
       customer_id: "21025739",
       account_id: account_id
     )
-    campaign_ids = service.get_campaigns_by_account_id(account_id).map do |c|
-      p c
-      c.id
-    end
+    campaign_ids = service.get_campaigns_by_account_id(account_id).map(&:id)
 
     campaign_ids.each_slice(100) do |ids|
       service.delete_campaigns(account_id, ids)

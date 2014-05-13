@@ -62,7 +62,7 @@ module BingAdsApi
 			response = call(:get_campaigns_by_account_id,
 				{account_id: account_id})
 			response_hash = get_response_hash(response, __method__)
-			response_campaigns = Array(response_hash[:campaigns][:campaign])
+			response_campaigns = [response_hash[:campaigns][:campaign]].flatten.compact
 			campaigns = response_campaigns.map do |camp_hash|
 				BingAdsApi::Campaign.new(camp_hash)
 			end
@@ -184,7 +184,7 @@ module BingAdsApi
 			response = call(:get_ad_groups_by_campaign_id,
 				{campaign_id: campaign_id})
 			response_hash = get_response_hash(response, __method__)
-			response_ad_groups = Array(response_hash[:ad_groups][:ad_group])
+			response_ad_groups = [response_hash[:ad_groups][:ad_group]].flatten.compact
 			ad_groups = response_ad_groups.map do |ad_group_hash|
 				BingAdsApi::AdGroup.new(ad_group_hash)
 			end
@@ -308,7 +308,7 @@ module BingAdsApi
 			response = call(:get_ads_by_ad_group_id,
 				{ad_group_id: ad_group_id})
 			response_hash = get_response_hash(response, __method__)
-			response_ads = Array(response_hash[:ads][:ad])
+			response_ads = [response_hash[:ads][:ad]].flatten.compact
 			ads = response_ads.map { |ad_hash| initialize_ad(ad_hash) }
 			return ads
 		end
@@ -468,7 +468,8 @@ module BingAdsApi
 				{ad_group_id: ad_group_id}
 			)
 			response_hash = get_response_hash(response, __method__)
-			response_keywords = Array(response_hash[:keywords][:keyword])
+			p response_hash
+			response_keywords = [response_hash[:keywords][:keyword]].flatten.compact
 			keywords = response_keywords.map do |keyword_hash|
 				BingAdsApi::Keyword.new(keyword_hash)
 			end
