@@ -40,6 +40,12 @@ describe BingAdsApi::CampaignManagement do
 			expect(response[:campaign_ids][:long]).not_to be_nil
 		end
 
+		it "should get campaigns by account when there are no campaigns" do
+			response = service.get_campaigns_by_account_id(default_options[:account_id])
+			expect(response).to be_kind_of(Array)
+			expect(response).to be_empty
+		end
+
 		context "when a campaign has already been created" do
 
 			before :each do
@@ -109,6 +115,12 @@ describe BingAdsApi::CampaignManagement do
 			response = service.add_ad_groups(@campaign_id, ad_groups)
 
 			expect(response[:ad_group_ids][:long]).not_to be_nil
+		end
+
+		it "should get ad groups by campaign when there are no ad groups" do
+			response = service.get_ad_groups_by_campaign_id(@campaign_id)
+			expect(response).to be_kind_of(Array)
+			expect(response).to be_empty
 		end
 
 		context "when an ad group has already been created" do
@@ -305,6 +317,11 @@ describe BingAdsApi::CampaignManagement do
 			expect(response[:partial_errors]).not_to be_nil
 		end
 
+		it "should get ads by ad group id when there are no ads" do
+			ads = service.get_ads_by_ad_group_id(@ad_group_id)
+			expect(ads).to be_empty
+		end
+
 		context "when an ad has already been created" do
 
 			before :each do
@@ -419,6 +436,11 @@ describe BingAdsApi::CampaignManagement do
 			response = service.add_keywords(@ad_group_id, keyword)
 			expect(response).not_to be_nil
 			expect(response[:partial_errors]).not_to be_nil
+		end
+
+		it "should get keywords by ad group id when there are no keywords" do
+			keywords = service.get_keywords_by_ad_group_id(@ad_group_id)
+			expect(keywords).to be_empty
 		end
 
 		context "when a keyword has already been created" do
