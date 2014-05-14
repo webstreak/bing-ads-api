@@ -89,7 +89,7 @@ module BingAdsApi
 			response = call(:get_detailed_bulk_download_status,
 				{request_id: download_request_id} )
 			response_hash = get_response_hash(response, __method__)
-			return response_hash
+			return BingAdsApi::DetailedBulkDownloadStatus.new(response_hash)
 		end
 
 

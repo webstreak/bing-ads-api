@@ -67,7 +67,7 @@ describe BingAdsApi::Bulk do
 
 			expect(bulk_download_status).not_to be_nil
 
-			expect(bulk_download_status.error?).to be_false
+			expect(bulk_download_status.failed?).to be_false
 		end
 
 	end

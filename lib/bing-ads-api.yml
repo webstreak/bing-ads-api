@@ -158,6 +158,11 @@ constants:
     download_file_type:
       csv: 'Csv'
       tsv: 'Tsv'
+    request_status_type:
+      completed: 'Completed'
+      in_progress: 'InProgress'
+      failed: 'Failed'
+      failed_full_sync_required: "FailedFullSyncRequired"
     time_periods:
       today: 'Today'
       yesterday: 'Yesterday'

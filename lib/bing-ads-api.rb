@@ -16,6 +16,10 @@ Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'service', '*.rb')].each {
 # Require data objects
 Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'data', '*.rb')].each { |file| require file }
 
+# Require bulk data objects
+Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'data', 'bulk', '*.rb')].each { |file| require file }
+
+
 # Require Fault objects
 require 'bing-ads-api/fault/application_fault'
 require 'bing-ads-api/fault/ad_api_error'
