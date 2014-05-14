@@ -10,10 +10,12 @@ wsdl:
     campaign_management: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v9/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.sandbox.bingads.microsoft.com/Api/CustomerManagement/v9/CustomerManagementService.svc?singleWsdl"
     reporting: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/Reporting/V9/ReportingService.svc?singleWsdl"
+    bulk: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v9/BulkService.svc?singleWsdl"
   production:
     campaign_management: "https://api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v9/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.bingads.microsoft.com/Api/CustomerManagement/v9/CustomerManagementService.svc?singleWsdl"
     reporting: "https://api.bingads.microsoft.com/Api/Advertiser/Reporting/V9/ReportingService.svc?singleWsdl"
+    bulk: "https://api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v9/BulkService.svc?singleWsdl"
 
 # All major constants are here
 # In general the key and value are the same. Key in snake_case (ruby-like) and value in CamelCase (Bing alike)
@@ -124,7 +126,51 @@ constants:
         spanish: 'ES'
         swedish: 'SV'
         traditional_chinese: 'ZH'
-
+  bulk:
+    data_scope:
+      entity_data: "EntityData"
+      entity_performance_data: "EntityPerformanceData"
+      quality_score_data: "QualityScoreData"
+      bid_suggestion_data: "BidSuggestionsData"
+    entities:
+      campaigns: "Campaigns"
+      ad_groups: "AdGroups"
+      ads: "Ads"
+      keywords: "Keywords"
+      campaign_negative_keywords: "CampaignNegativeKeywords"
+      ad_group_negative_keywords: "AdGroupNegativeKeywords"
+      campaign_targets: "CampaignTargets"
+      ad_group_targets: "AdGroupTargets"
+      campaign_negative_sites: "CampaignNegativeSites"
+      ad_group_negative_sites: "AdGroupNegativeSites"
+      campaign_site_links_ad_extensions: "CampaignSiteLinksAdExtensions"
+      campaign_product_ad_extensions: "CampaignProductAdExtensions"
+      campaign_call_ad_extensions: "CampaignCallAdExtensions"
+      ad_group_product_targets: "AdGroupProductTargets"
+      ad_group_site_links_ad_extensions: "AdGroupSiteLinksAdExtensions"
+      location_ad_extensions: "LocationAdExtensions"
+      call_ad_extensions: "CallAdExtensions"
+      site_links_ad_extensions: "SiteLinksAdExtensions"
+      product_ad_extensions: "ProductAdExtensions"
+      negative_keywords_list: "NegativeKeywordsList"
+      negative_keyword: "NegativeKeyword"
+      campaign_negative_keyword_list: "CampaignNegativeKeywordList"
+    download_file_type:
+      csv: 'Csv'
+      tsv: 'Tsv'
+    time_periods:
+      today: 'Today'
+      yesterday: 'Yesterday'
+      last_seven_days: 'LastSevenDays'
+      this_week: 'ThisWeek'
+      last_week: 'LastWeek'
+      last_four_weeks: 'LastFourWeeks'
+      this_month: 'ThisMonth'
+      last_month: 'LastMonth'
+      last_three_months: 'LastThreeMonths'
+      last_six_months: 'LastSixMonths'
+      this_year: 'ThisYear'
+      last_year: 'LastYear'
   # Constansts specific for campaign management services
   campaign_management:
     budget_limit_type:
