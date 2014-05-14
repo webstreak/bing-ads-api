@@ -98,7 +98,6 @@ module BingAdsApi
 			message = {
 				:account_id => account_id,
 				:campaigns => {:campaign => camps} }
-			puts message
 			response = call(:add_campaigns, message)
 			return get_response_hash(response, __method__)
 		end
@@ -133,7 +132,6 @@ module BingAdsApi
 			message = {
 				:account_id => account_id,
 				:campaigns => {:campaign => camps} }
-			puts message
 			response = call(:update_campaigns, message)
 			return get_response_hash(response, __method__)
 
@@ -252,7 +250,6 @@ module BingAdsApi
 			message = {
 				:campaign_id => campaign_id,
 				:ad_groups => {:ad_group => groups} }
-			puts message
 			response = call(:add_ad_groups, message)
 			return get_response_hash(response, __method__)
 		end
@@ -284,7 +281,6 @@ module BingAdsApi
 			message = {
 				:campaign_id => campaign_id,
 				:ad_groups => {:ad_group => groups} }
-			puts message
 			response = call(:update_ad_groups, message)
 			return get_response_hash(response, __method__)
 		end
@@ -385,7 +381,6 @@ module BingAdsApi
 			message = {
 				:ad_group_id => ad_group_id,
 				:ads => {:ad => ads_for_soap} }
-			puts message
 			response = call(:add_ads, message)
 
 			response_hash = get_response_hash(response, __method__)
@@ -431,7 +426,6 @@ module BingAdsApi
 			message = {
 				:ad_group_id => ad_group_id,
 				:ads => {:ad => ads_for_soap} }
-			puts message
 			response = call(:update_ads, message)
 
 			response_hash = get_response_hash(response, __method__)
