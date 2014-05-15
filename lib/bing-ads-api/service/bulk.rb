@@ -56,7 +56,7 @@ module BingAdsApi
 				account_ids: {"ins0:long" => account_ids},
 		    data_scope: data_scope_to_array(options[:data_scope]),
 		    download_file_type: DOWNLOAD_FILE_TYPES[options[:download_file_type].to_s],
-				entities: entities_to_array(entities),
+				entities: entities_for_soap(entities),
 		    format_version: options[:format_version],
 		    last_sync_time_in_utc: options[:last_sync_time_in_utc],
 		    location_target_version: options[:location_target_version],
@@ -121,12 +121,12 @@ module BingAdsApi
 
 
 			# Internal: Converts entity symbols (in snake case) to camelcased variants
-			# for SOAP.
+			# for SOAP and joins them by whitespace characters.
 			#
 			# Author:: alex.cavalli@offers.com
 			#
-			# Returns:: Array
-			def entities_to_array(entities)
+			# Returns:: String
+			def entities_for_soap(entities)
 				raise Exception.new("Invalid entities value: nil") unless entities
 
 				valid_entities = BingAdsApi::Config.instance.bulk_constants['entities']
@@ -137,7 +137,7 @@ module BingAdsApi
 					elsif entity.is_a?(Symbol)
 						valid_entities[entity.to_s]
 					end
-				end
+				end.join(" ")
 			end
 
 	end
