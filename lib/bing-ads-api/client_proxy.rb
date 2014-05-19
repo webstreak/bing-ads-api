@@ -114,14 +114,14 @@ module BingAdsApi
 			#
 			# Returns:: Savon client instance
 			def get_proxy(client_settings)
-
 				settings = {
 					convert_request_keys_to: KEYS_CASE,
 					wsdl: self.wsdl_url,
 					namespace_identifier: NAMESPACE,
 					soap_header: build_headers
 				}
-				settings.merge(client_settings) if client_settings
+				settings.merge!(client_settings) if client_settings
+
 				return Savon.client(settings)
 			end
 
