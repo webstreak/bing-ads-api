@@ -1,8 +1,23 @@
 # -*- encoding : utf-8 -*-
 require 'spec_helper'
+require 'tempfile'
 
 # Author:: alex.cavalli@offers.com
 describe BingAdsApi::Bulk do
+
+	def generate_bulk_upload_file
+		raise ArgumentError, "Block is required" unless block_given?
+		Tempfile.open(["bulk_upload", ".csv"]) do |tempfile|
+			tempfile.binmode
+			tempfile << "Type,Status,Id,Parent Id,Campaign,Sync Time,Time Zone,Budget,Budget Type,Name"
+		  tempfile << "Format Version,,,,,,,,,1"
+			tempfile << "Account,,#{default_options[:account_id]},21025739,,,,,,"
+			tempfile << "Campaign,Active,,#{default_options[:account_id]},Test Campaign #{SecureRandom.uuid},,Santiago,2000,DailyBudgetStandard,"
+			tempfile << "Campaign,Active,,#{default_options[:account_id]},Test Campaign #{SecureRandom.uuid},,Santiago,2000,DailyBudgetStandard,"
+			tempfile.rewind
+			yield tempfile.path
+		end
+	end
 
 	let(:default_options) do
 		{
@@ -71,4 +86,72 @@ describe BingAdsApi::Bulk do
 		end
 
 	end
+
+	it "should retrieve a bulk upload URL and request ID" do
+		account_id = default_options[:account_id]
+		options = {response_mode: :errors_and_results}
+
+		upload_request = nil
+		expect{
+			upload_request = service.get_bulk_upload_url(
+				account_id,
+				options
+			)
+		}.not_to raise_error
+
+		expect(upload_request[:request_id]).not_to be_nil
+		expect(upload_request[:upload_url]).not_to be_nil
+	end
+
+	it "should submit a bulk upload file and return the request ID" do
+		account_id = default_options[:account_id]
+		options = {response_mode: :errors_and_results}
+
+		upload_request_id = nil
+		generate_bulk_upload_file do |upload_file|
+			expect{
+					upload_request_id = service.submit_bulk_upload_file(
+						upload_file,
+						account_id,
+						options
+					)
+			}.not_to raise_error
+		end
+
+		expect(upload_request_id).not_to be_nil
+	end
+
+	context "when a bulk request has been requested" do
+		it "should download result file" do
+			account_id = default_options[:account_id]
+			options = {response_mode: :errors_and_results}
+
+			upload_request_id = nil
+			generate_bulk_upload_file do |upload_file|
+				upload_request_id = service.submit_bulk_upload_file(
+					upload_file,
+					account_id,
+					options
+				)
+			end
+
+			tries = 0
+			loop do
+				upload_status = service.get_detailed_bulk_upload_status(upload_request_id)
+				if upload_status.failed? || upload_status.pending_file_upload? || tries == 5
+					raise "Upload failed with status: #{upload_status.request_status}. Tried #{tries} times."
+				end
+
+				downloaded = upload_status.download_result_file(__FILE__)
+				if downloaded
+					# clean up downloaded file
+					FileUtils.rm(downloaded)
+					break # success
+				end
+				tries += 1
+				sleep(1)
+			end
+		end
+	end
+
 end

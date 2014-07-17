@@ -1,3 +1,5 @@
+require 'rest_client'
+
 # -*- encoding : utf-8 -*-
 module BingAdsApi
 
@@ -20,6 +22,9 @@ module BingAdsApi
 		# Valid download file types for bulk API
 		DOWNLOAD_FILE_TYPES = BingAdsApi::Config.instance.
 			bulk_constants['download_file_type']
+
+		RESPONSE_MODES = BingAdsApi::Config.instance.
+			bulk_constants['response_mode']
 
 		# Public: Issue a download request for all entities in an account.
 		#
@@ -71,6 +76,74 @@ module BingAdsApi
 		end
 
 
+		# Public: Get an upload URL and corresponding request ID. The URL can be
+		# used to post a bulk upload file to, and the request ID can be used to
+		# track the status of the request once the file has been posted. See
+		# http://msdn.microsoft.com/en-US/library/bing-ads-bulk-download-and-upload-guide.aspx#bulkupload
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# +account_id+ - An account id to apply the bulk upload to
+		# +options+ - Hash of additional options
+		#
+		# === Examples
+		#   service.get_bulk_upload_url(111)
+		#   # => {request_id: 222, upload_url: "http://www.example.com/"}
+		#
+		# Returns:: Hash with the upload URL and upload request ID
+		#
+		# Raises:: exception
+		def get_bulk_upload_url(account_id, options={})
+			response = call(:get_bulk_upload_url,
+				account_id: account_id,
+				response_mode: RESPONSE_MODES[options[:response_mode].to_s]
+			)
+			response_hash = get_response_hash(response, __method__)
+			return response_hash
+		end
+
+
+		# Public: Post a bulk upload file to the Bing Ads API and return the bulk
+		# request ID. This method does not map to a specific service call in the
+		# Bing Ads API, but wraps the GetBulkUploadUrl call and POSTs the file
+		# upload to the provided upload URL.
+		# http://msdn.microsoft.com/en-US/library/bing-ads-bulk-download-and-upload-guide.aspx#bulkupload
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# +file+ - A path to the CSV/TSV bulk file to upload
+		# +account_id+ - An account id to apply the bulk upload to
+		# +options+ - Hash of additional options
+		#
+		# === Examples
+		#   service.submit_bulk_upload_file("bulk_upload.csv", 111)
+		#   # => "1234567890"
+		#
+		# Returns:: String with the upload request id
+		#
+		# Raises:: exception
+		def submit_bulk_upload_file(file, account_id, options={})
+			upload_request = get_bulk_upload_url(account_id, options)
+
+			# TODO: Extract this HTTP interface to separate object
+			response = RestClient.post(
+				upload_request[:upload_url],
+				{file: File.new(file)},
+				"UserName" => client_proxy.username,
+				"Password" => client_proxy.password,
+				"DeveloperToken" => client_proxy.developer_token,
+				"CustomerId" => client_proxy.customer_id,
+				"AccountId" => account_id,
+			)
+
+			raise "File upload failed. HTTP response:\n#{response.to_str}" unless response.code == 200
+
+			return upload_request[:request_id]
+		end
+
+
 		# Public: Get the status of a report request
 		#
 		# Author:: alex.cavalli@offers.com
@@ -80,9 +153,9 @@ module BingAdsApi
 		#
 		# === Examples
 		#   service.get_detailed_bulk_download_status("12345")
-		#   # => Hash
+		#   # => DetailedBulkDownloadStatus
 		#
-		# Returns:: Hash with the GetDetailedBulkDownloadStatusResponse structure
+		# Returns:: DetailedBulkDownloadStatus
 		#
 		# Raises:: exception
 		def get_detailed_bulk_download_status(download_request_id)
@@ -90,6 +163,28 @@ module BingAdsApi
 				{request_id: download_request_id} )
 			response_hash = get_response_hash(response, __method__)
 			return BingAdsApi::DetailedBulkDownloadStatus.new(response_hash)
+		end
+
+
+		# Public: Get the status of a upload request
+		#
+		# Author:: alex.cavalli@offers.com
+		#
+		# === Parameters
+		# +upload_request_id+ - Identifier of the upload request
+		#
+		# === Examples
+		#   service.get_detailed_bulk_upload_status("12345")
+		#   # => DetailedBulkUploadStatus
+		#
+		# Returns:: DetailedBulkUploadStatus
+		#
+		# Raises:: exception
+		def get_detailed_bulk_upload_status(upload_request_id)
+			response = call(:get_detailed_bulk_upload_status,
+				{request_id: upload_request_id} )
+			response_hash = get_response_hash(response, __method__)
+			return BingAdsApi::DetailedBulkUploadStatus.new(response_hash.merge('request_id' => upload_request_id))
 		end
 
 

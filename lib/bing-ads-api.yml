@@ -160,9 +160,15 @@ constants:
       tsv: 'Tsv'
     request_status_type:
       completed: 'Completed'
-      in_progress: 'InProgress'
+      completed_with_errors: 'CompletedWithErrors'
       failed: 'Failed'
       failed_full_sync_required: "FailedFullSyncRequired"
+      file_uploaded: 'FileUploaded'
+      in_progress: 'InProgress'
+      pending_file_upload: 'PendingFileUpload'
+    response_mode:
+      errors_only: 'ErrorsOnly'
+      errors_and_results: 'ErrorsAndResults'
     time_periods:
       today: 'Today'
       yesterday: 'Yesterday'
