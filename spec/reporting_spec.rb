@@ -183,7 +183,7 @@ describe BingAdsApi::Reporting do
 
 			expect(report_request_status).not_to be_nil
 
-			expect(report_request_status.error?).to be_false
+			expect(report_request_status.error?).to eq(false)
 		end
 
 	end

@@ -25,7 +25,7 @@ describe BingAdsApi::Helpers::FilterHelper do
           :status => nil
         }
       )
-    ).to be_true
+    ).to eq(true)
   end
 
   it "should raise exception when invalid filter is provided" do
