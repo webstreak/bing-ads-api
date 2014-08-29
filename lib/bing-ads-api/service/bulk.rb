@@ -96,8 +96,8 @@ module BingAdsApi
 		# Raises:: exception
 		def get_bulk_upload_url(account_id, options={})
 			response = call(:get_bulk_upload_url,
+				response_mode: RESPONSE_MODES[options[:response_mode].to_s],
 				account_id: account_id,
-				response_mode: RESPONSE_MODES[options[:response_mode].to_s]
 			)
 			response_hash = get_response_hash(response, __method__)
 			return response_hash
