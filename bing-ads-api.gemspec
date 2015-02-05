@@ -16,11 +16,11 @@ Gem::Specification.new do |s|
 	s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 	s.test_files = Dir["spec/**/*"]
 
-	s.add_dependency "savon", "< 3.0"
-	s.add_dependency "rest_client"
+	s.add_dependency "savon", "< 2.7"
+	s.add_dependency "rest-client"
 	s.add_dependency "activesupport"
 
-	s.add_development_dependency "rspec"
+	s.add_development_dependency "rspec", "< 3.0"
 	s.add_development_dependency "guard"
 	s.add_development_dependency "guard-rspec"
 end
