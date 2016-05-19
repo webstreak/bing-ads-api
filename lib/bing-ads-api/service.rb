@@ -62,7 +62,7 @@ module BingAdsApi
 			# ClientProxy creation
 			self.client_proxy = BingAdsApi::ClientProxy.new(clientProxySettings)
 
-      self.max_retry_attempts = options[:max_retry_attempts] || 0
+			self.max_retry_attempts = options[:max_retry_attempts] || 0
 		end
 
 
@@ -83,7 +83,7 @@ module BingAdsApi
 		# Returns:: Hash with the result of the service call
 		# Raises:: ServiceError if the SOAP call, the ClientProxy fails or the response is invalid
 		def call(operation, message, &block)
-      retries_made = 0
+			retries_made = 0
 			raise "You must provide an operation" if operation.nil?
 			begin
 				LOGGER.debug "BingAdsApi Service"
@@ -117,15 +117,15 @@ module BingAdsApi
 			rescue Savon::InvalidResponseError => error
 				LOGGER.error "Invalid server reponse calling #{operation.to_s}"
 				raise
-      rescue
-        # for any other exceptions, retry with an exponential backoff
-        if retries_made < max_retry_attempts
-          sleep(2**(retries_made))
-          retries_made += 1
-          retry
-        else
-          raise
-        end
+			rescue
+				# for any other exceptions, retry with an exponential backoff
+				if retries_made < max_retry_attempts
+					sleep(2**(retries_made))
+					retries_made += 1
+					retry
+				else
+					raise
+				end
 			end
 		end
 
