@@ -3,13 +3,13 @@
 module BingAdsApi
 
 	##
-	# Public: Wrapper class for GetDetailedBulkDownloadStatusResponse. Not an
+	# Public: Wrapper class for GetBulkDownloadStatusResponse. Not an
 	# actual data object in the Bing API.
 	#
 	# http://msdn.microsoft.com/en-US/library/dn600289.aspx
 	#
 	# Author:: alex.cavalli@offers.com
-	class DetailedBulkDownloadStatus < BingAdsApi::DataObject
+	class BulkDownloadStatus < BingAdsApi::DataObject
 
 		# Valid report request status for reports
 		REQUEST_STATUS = BingAdsApi::Config.instance.
