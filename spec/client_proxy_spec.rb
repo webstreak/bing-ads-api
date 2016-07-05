@@ -21,7 +21,7 @@ describe BingAdsApi::ClientProxy do
 			developer_token: @developer_token,
 			customer_id: @customer_id,
 			account_id: @account_id,
-			wsdl_url: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v10/CampaignManagementService.svc?singleWsdl"
+			wsdl_url: "https://campaign.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/CampaignManagementService.svc?singleWsdl"
 		}
 		client = BingAdsApi::ClientProxy.new(options)
 
@@ -36,7 +36,7 @@ describe BingAdsApi::ClientProxy do
 			developer_token: @developer_token,
 			customer_id: @customer_id,
 			account_id: @account_id,
-			wsdl_url: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v10/CampaignManagementService.svc?singleWsdl",
+			wsdl_url: "https://campaign.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/CampaignManagementService.svc?singleWsdl",
 			proxy: {
 				logger: Logger.new(STDOUT),
 				encoding: "UTF-8"
@@ -50,7 +50,7 @@ describe BingAdsApi::ClientProxy do
 
 	it "should call service" do
 		options = default_options.merge(
-			wsdl_url: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v10/CampaignManagementService.svc?singleWsdl"
+			wsdl_url: "https://campaign.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/CampaignManagementService.svc?singleWsdl"
 		)
 
 		client = BingAdsApi::ClientProxy.new(options)
