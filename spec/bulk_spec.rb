@@ -26,8 +26,7 @@ describe BingAdsApi::Bulk do
 			password: "sandbox123",
 			developer_token: "BBD37VB98",
 			customer_id: "21025739",
-			account_id: "8506945",
-      proxy: {log: true}
+			account_id: "8506945"
 		}
 	end
 	let(:service) { BingAdsApi::Bulk.new(default_options) }
