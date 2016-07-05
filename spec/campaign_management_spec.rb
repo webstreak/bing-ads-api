@@ -230,52 +230,6 @@ describe BingAdsApi::CampaignManagement do
 
 		end
 
-		describe "mobile ads" do
-
-			it "should add a single ad" do
-				mobile_ad = BingAdsApi::MobileAd.new(
-					business_name: "Business",
-					destination_url: "http://www.adxion.com",
-					display_url: "adxion.com",
-					phone_number: "555555555",
-					text: "Publish with us",
-					title: "Mobile Ad"
-				)
-
-				response = service.add_ads(@ad_group_id, mobile_ad)
-				expect(response).not_to be_nil
-				expect(response[:partial_errors]).to be_nil
-				expect(response[:ad_ids][:long]).not_to be_nil
-			end
-
-			it "should add multiple ads" do
-				mobile_ads = [
-					BingAdsApi::MobileAd.new(
-						business_name: "Business 1",
-						destination_url: "http://www.adxion.com",
-						display_url: "AdXion.com",
-						phone_number: "555555555",
-						text: "Publish with us",
-						title: "MobileAd"
-					),
-					BingAdsApi::MobileAd.new(
-						business_name: "Business 2",
-						destination_url: "http://www.adxion.com",
-						display_url: "AdXion.com",
-						phone_number: "555555555",
-						text: "Keep publishing",
-						title: "MobileAd 2"
-					)
-				]
-
-				response = service.add_ads(@ad_group_id, mobile_ads)
-				expect(response).not_to be_nil
-				expect(response[:partial_errors]).to be_nil
-				expect(response[:ad_ids][:long]).not_to be_nil
-			end
-
-		end
-
 		describe "product ads" do
 
 			it "should add a single ad" do
@@ -295,10 +249,10 @@ describe BingAdsApi::CampaignManagement do
 				pending("Product ads not enabled for the test account")
 
 				product_ads = [
-					BingAdsApi::MobileAd.new(
+					BingAdsApi::ProductAd.new(
 						promotional_text: "My Promotional text #{SecureRandom.uuid}"
 					),
-					BingAdsApi::MobileAd.new(
+					BingAdsApi::ProductAd.new(
 						promotional_text: "My Promotional text 2 #{SecureRandom.uuid}"
 					)
 				]
@@ -432,8 +386,8 @@ describe BingAdsApi::CampaignManagement do
 
 		it "should add a keyword with partial errors" do
 			keyword = BingAdsApi::Keyword.new(
-				bid: BingAdsApi::Bid.new(amount: 1.23),
-				destination_url: "http:com", # invalid URL
+        # missing bid
+				destination_url: "http://www.bing.com/",
 				match_type: BingAdsApi::Keyword::EXACT,
 				status: BingAdsApi::Keyword::ACTIVE,
 				text: "Keyword #{SecureRandom.uuid}"
