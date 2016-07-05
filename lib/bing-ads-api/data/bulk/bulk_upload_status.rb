@@ -5,13 +5,13 @@ require 'open-uri'
 module BingAdsApi
 
 	##
-	# Public: Wrapper class for GetDetailedBulkUploadStatusResponse. Not an
+	# Public: Wrapper class for GetBulkUploadStatusResponse. Not an
 	# actual data object in the Bing API.
 	#
 	# http://msdn.microsoft.com/en-US/library/dn600289.aspx
 	#
 	# Author:: alex.cavalli@offers.com
-	class DetailedBulkUploadStatus < BingAdsApi::DataObject
+	class BulkUploadStatus < BingAdsApi::DataObject
 
 		# Valid request status
 		REQUEST_STATUS = BingAdsApi::Config.instance.

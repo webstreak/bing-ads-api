@@ -62,7 +62,7 @@ module BingAdsApi
 		    data_scope: data_scope_to_array(options[:data_scope]),
 		    download_file_type: DOWNLOAD_FILE_TYPES[options[:download_file_type].to_s],
 				entities: entities_for_soap(entities),
-		    format_version: options[:format_version],
+		    format_version: options[:format_version] || 4.0,
 		    last_sync_time_in_utc: options[:last_sync_time_in_utc],
 		    location_target_version: options[:location_target_version],
 		    performance_stats_date_range: options[:performance_stats_date_range]
@@ -152,17 +152,17 @@ module BingAdsApi
 		# +download_request_id+ - Identifier of the report request
 		#
 		# === Examples
-		#   service.get_detailed_bulk_download_status("12345")
-		#   # => DetailedBulkDownloadStatus
+		#   service.get_bulk_download_status("12345")
+		#   # => BulkDownloadStatus
 		#
-		# Returns:: DetailedBulkDownloadStatus
+		# Returns:: BulkDownloadStatus
 		#
 		# Raises:: exception
-		def get_detailed_bulk_download_status(download_request_id)
-			response = call(:get_detailed_bulk_download_status,
+		def get_bulk_download_status(download_request_id)
+			response = call(:get_bulk_download_status,
 				{request_id: download_request_id} )
 			response_hash = get_response_hash(response, __method__)
-			return BingAdsApi::DetailedBulkDownloadStatus.new(response_hash)
+			return BingAdsApi::BulkDownloadStatus.new(response_hash)
 		end
 
 
@@ -174,17 +174,17 @@ module BingAdsApi
 		# +upload_request_id+ - Identifier of the upload request
 		#
 		# === Examples
-		#   service.get_detailed_bulk_upload_status("12345")
-		#   # => DetailedBulkUploadStatus
+		#   service.get_bulk_upload_status("12345")
+		#   # => BulkUploadStatus
 		#
-		# Returns:: DetailedBulkUploadStatus
+		# Returns:: BulkUploadStatus
 		#
 		# Raises:: exception
-		def get_detailed_bulk_upload_status(upload_request_id)
-			response = call(:get_detailed_bulk_upload_status,
+		def get_bulk_upload_status(upload_request_id)
+			response = call(:get_bulk_upload_status,
 				{request_id: upload_request_id} )
 			response_hash = get_response_hash(response, __method__)
-			return BingAdsApi::DetailedBulkUploadStatus.new(response_hash.merge('request_id' => upload_request_id))
+			return BingAdsApi::BulkUploadStatus.new(response_hash.merge('request_id' => upload_request_id))
 		end
 
 

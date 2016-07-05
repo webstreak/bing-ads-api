@@ -9,11 +9,11 @@ describe BingAdsApi::Bulk do
 		raise ArgumentError, "Block is required" unless block_given?
 		Tempfile.open(["bulk_upload", ".csv"]) do |tempfile|
 			tempfile.binmode
-			tempfile << "Type,Status,Id,Parent Id,Campaign,Sync Time,Time Zone,Budget,Budget Type,Name"
-		  tempfile << "Format Version,,,,,,,,,1"
-			tempfile << "Account,,#{default_options[:account_id]},21025739,,,,,,"
-			tempfile << "Campaign,Active,,#{default_options[:account_id]},Test Campaign #{SecureRandom.uuid},,Santiago,2000,DailyBudgetStandard,"
-			tempfile << "Campaign,Active,,#{default_options[:account_id]},Test Campaign #{SecureRandom.uuid},,Santiago,2000,DailyBudgetStandard,"
+			tempfile << "Type,Status,Id,Parent Id,Campaign,Sync Time,Time Zone,Budget,Budget Type,Name,Campaign Type\n"
+		  tempfile << "Format Version,,,,,,,,,4.0,\n"
+			tempfile << "Account,,#{default_options[:account_id]},21025739,,,,,,,\n"
+			tempfile << "Campaign,Active,,#{default_options[:account_id]},Test Campaign #{SecureRandom.uuid},,Santiago,2000,DailyBudgetStandard,,SearchAndContent\n"
+			tempfile << "Campaign,Active,,#{default_options[:account_id]},Test Campaign #{SecureRandom.uuid},,Santiago,2000,DailyBudgetStandard,,SearchAndContent\n"
 			tempfile.rewind
 			yield tempfile.path
 		end
@@ -26,7 +26,8 @@ describe BingAdsApi::Bulk do
 			password: "sandbox123",
 			developer_token: "BBD37VB98",
 			customer_id: "21025739",
-			account_id: "8506945"
+			account_id: "8506945",
+      proxy: {log: true}
 		}
 	end
 	let(:service) { BingAdsApi::Bulk.new(default_options) }
@@ -43,7 +44,7 @@ describe BingAdsApi::Bulk do
 		options = {
 	    data_scope: :entity_performance_data,
 	    download_file_type: :csv,
-	    format_version: 2.0,
+	    format_version: 4.0,
 	    last_sync_time_in_utc: "2001-10-26T21:32:52",
 	    location_target_version: "Latest",
 	    performance_stats_date_range: {
@@ -77,7 +78,7 @@ describe BingAdsApi::Bulk do
 		it "should successfully get detailed response status" do
 			bulk_download_status = nil
 			expect{
-				bulk_download_status = service.get_detailed_bulk_download_status(@download_request_id)
+				bulk_download_status = service.get_bulk_download_status(@download_request_id)
 			}.not_to raise_error
 
 			expect(bulk_download_status).not_to be_nil
@@ -137,7 +138,7 @@ describe BingAdsApi::Bulk do
 
 			tries = 0
 			loop do
-				upload_status = service.get_detailed_bulk_upload_status(upload_request_id)
+				upload_status = service.get_bulk_upload_status(upload_request_id)
 				if upload_status.failed? || upload_status.pending_file_upload? || tries == 5
 					raise "Upload failed with status: #{upload_status.request_status}. Tried #{tries} times."
 				end
