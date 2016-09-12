@@ -5,11 +5,11 @@ require "bing-ads-api/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-	s.name        = "vulcan-bing-ads-api"
+	s.name        = "bing-ads-api"
 	s.version     = BingAdsApi::VERSION
 	s.authors     = ["Colin Knox", "Alexander Cavalli"]
-	s.email       = ["colin.knox@offers.com"]
-	s.homepage    = "https://github.com/info-sys/bing-ads-api"
+	s.email       = ["alex.cavalli@offers.com"]
+	s.homepage    = "https://github.com/alexcavalli/bing-ads-api"
 	s.summary     = "Bing Ads API for Ruby"
 	s.description = "A set of pure Ruby classes for the Bing Ads API"
 
@@ -20,7 +20,5 @@ Gem::Specification.new do |s|
 	s.add_dependency "rest-client"
 	s.add_dependency "activesupport"
 
-	s.add_development_dependency "rspec", "< 3.0"
-	s.add_development_dependency "guard"
-	s.add_development_dependency "guard-rspec"
+	s.add_development_dependency "rspec"
 end

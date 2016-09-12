@@ -230,39 +230,6 @@ describe BingAdsApi::CampaignManagement do
 
 		end
 
-		describe "product ads" do
-
-			it "should add a single ad" do
-				pending("Product ads not enabled for the test account")
-
-				product_ad = BingAdsApi::ProductAd.new(
-					promotional_text: "Promotion #{SecureRandom.uuid}"
-				)
-
-				response = service.add_ads(@ad_group_id, product_ad)
-				expect(response).not_to be_nil
-				expect(response[:partial_errors]).to be_nil
-				expect(response[:ad_ids][:long]).not_to be_nil
-			end
-
-			it "should add multiple ads" do
-				pending("Product ads not enabled for the test account")
-
-				product_ads = [
-					BingAdsApi::ProductAd.new(
-						promotional_text: "My Promotional text #{SecureRandom.uuid}"
-					),
-					BingAdsApi::ProductAd.new(
-						promotional_text: "My Promotional text 2 #{SecureRandom.uuid}"
-					)
-				]
-
-				response = service.add_ads(@ad_group_id, product_ads)
-				expect(response).not_to be_nil
-			end
-
-		end
-
 		it "should add an ad with partial errors" do
 			text_ad = BingAdsApi::TextAd.new(
 				status: BingAdsApi::Ad::INACTIVE,
