@@ -1,0 +1,7 @@
+# Specify the major Ruby version to be compatible with.
+# Options: [1.8, 1.9, 2.0], Default: 1.9.
+compat.version=2.0
+
+# Enable colorized backtraces.
+# Options: [true, false], Default: false.
+backtrace.color=true
