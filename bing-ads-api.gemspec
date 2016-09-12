@@ -7,7 +7,7 @@ require "bing-ads-api/version"
 Gem::Specification.new do |s|
 	s.name        = "bing-ads-api"
 	s.version     = BingAdsApi::VERSION
-	s.authors     = ["Colin Knox", "Alexander Cavalli"]
+	s.authors     = ["Juan Pablo Lopez N", "Alex Cavalli", "Colin Knox"]
 	s.email       = ["alex.cavalli@offers.com"]
 	s.homepage    = "https://github.com/alexcavalli/bing-ads-api"
 	s.summary     = "Bing Ads API for Ruby"
