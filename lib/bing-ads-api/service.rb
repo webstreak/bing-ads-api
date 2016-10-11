@@ -48,6 +48,7 @@ module BingAdsApi
 
 			# ClientProxy settings
 			clientProxySettings = {
+				:authentication_token => options[:authentication_token],
 				:username => options[:username],
 				:password => options[:password],
 				:developer_token => options[:developer_token],
