@@ -188,6 +188,8 @@ constants:
       monthly_budget_spend_until_depleted: 'MonthlyBudgetSpendUntilDepleted'
       daily_budget_accelerated: 'DailyBudgetAccelerated'
       daily_budget_standard: 'DailyBudgetStandard'
+    campaign_type:
+      dynamic_search: 'DynamicSearchAds'
     campaign_status:
       active: 'Active'
       paused: 'Paused'
@@ -596,6 +598,7 @@ orders:
       - name
       - status
       - time_zone
+      - campaign_type
     keyword:
       - bid
       - destination_url

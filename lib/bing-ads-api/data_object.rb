@@ -59,6 +59,7 @@ module BingAdsApi
 		# * +hash+ - the hash to apply an id-elevated order to
 		def apply_order(hash)
 			key_order = get_key_order
+      p key_order
 			return if key_order.empty?
 			key_order = key_order.map { |key| key.to_s.camelcase }
 			key_order = key_order & hash.keys # remove keys from order not present in hash
