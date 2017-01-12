@@ -92,7 +92,6 @@ module BingAdsApi
 				LOGGER.debug "   Message: #{message}"
 				response = self.client_proxy.call(operation.to_sym,
 					message: message)
-
 				LOGGER.debug "response header:"
 				LOGGER.debug "\t#{response.header}"
 

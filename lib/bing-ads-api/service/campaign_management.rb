@@ -102,7 +102,51 @@ module BingAdsApi
 			return get_response_hash(response, __method__)
 		end
 
+    # Public : Adds a target to the specified account
+		#
+		# Author:: webstreak@webstreak.com
+		#
+		# === Parameters
+		# account_id - account who will own the newly campaigns
+		# targets - An array of BingAdsApi::Target
+		#
 
+    def add_targets_to_library(account_id, targets)
+      ts = []
+      if targets.is_a? Array
+				ts = targets.map{ |target| target.to_hash(:camelcase) }
+			elsif targets.is_a? BingAdsApi::Target
+				ts = targets.to_hash
+			else
+				raise "targets must be an array of BingAdsApi::Targets"
+			end
+      message = {
+        :account_id => account_id,
+        :targets => {:target => ts}
+      }
+      response = call(:add_targets_to_library, message)
+      return get_response_hash(response, __method__)
+    end
+    
+    # Public : Adds a target to the specified campaign
+		#
+		# Author:: webstreak@webstreak.com
+		#
+		# === Parameters
+		# account_id - account who will own the newly campaigns
+		# target_id - ID of the target
+		# campaign_id - ID of the campaign
+		#
+
+    def set_target_to_campaign(account_id, target_id, campaign_id)
+      message = {
+        account_id: account_id,
+        campaign_id: campaign_id,
+        target_id: target_id
+      }
+      response = call(:set_target_to_campaign, message)
+      return get_response_hash(response, __method__)
+    end
 		# Public : Updates on or more campaigns for the specified account
 		#
 		# Author:: jlopezn@neonline.cl

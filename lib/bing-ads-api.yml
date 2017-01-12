@@ -243,6 +243,9 @@ constants:
       content: 'Content'
       exact: 'Exact'
       phrase: 'Phrase'
+    distance_units:
+      miles: 'Miles'
+      kilometers: 'Kilometers'
   # Constants specific for customer management
   customer_management:
     account_life_cycle_statuses:
@@ -584,6 +587,7 @@ orders:
       - network
       - phrase_match_bid
       - pricing_model
+      - search_bid
       - start_date
       - status
     campaign:
@@ -620,11 +624,19 @@ orders:
       - title
     product_ad:
       - promotional_text
+    target:
+       - id
+       - location
     text_ad:
       - destination_url
       - display_url
       - text
       - title
+    location_target:
+      - id
+      - city_target
+      - state_target
+      - postal_code_target
   reporting:
     report_request:
       - format

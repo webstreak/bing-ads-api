@@ -20,6 +20,48 @@ describe BingAdsApi::CampaignManagement do
 		new_service = BingAdsApi::CampaignManagement.new(default_options)
 		expect(new_service).not_to be_nil
 	end
+    
+  describe "targets operations" do
+
+    it "should add city target" do
+      target = BingAdsApi::Target.new(
+        location: BingAdsApi::LocationTarget.new(
+          city_target: BingAdsApi::CityTarget.new(
+            bids: [
+              city_target_bid: BingAdsApi::CityTargetBid.new(
+                                bid_adjustment: 0,
+                                city: 'Sydney, NS AU',
+                                is_excluded: false
+                              )]
+          )
+        )
+      )
+      response = service.add_targets_to_library(default_options[:account_id], target)
+      expect(response[:target_ids][:long]).not_to be_nil
+    end
+
+    it "should add radius target" do
+      target = BingAdsApi::Target.new(
+        location: BingAdsApi::LocationTarget.new(
+          radius_target: BingAdsApi::RadiusTarget.new(
+            bids: [
+              radius_target_bid: BingAdsApi::RadiusTargetBid.new(
+                                bid_adjustment:    0,
+                                id:                nil,
+                                is_excluded: false,
+                                latitude_degrees:  35.575156,
+                                longitude_degrees: -77.398931,
+                                radius:            20,
+                                radius_unit: BingAdsApi::DistanceUnits::MILES
+            )]
+          )
+        )
+      )
+      response = service.add_targets_to_library(default_options[:account_id], target)
+      expect(response[:target_ids][:long]).not_to be_nil
+    end
+
+  end
 
 	describe "campaign operations" do
 
