@@ -225,6 +225,7 @@ constants:
       deleted: 'Deleted'
     ad_type:
       text: 'Text'
+      expanded_text: 'ExpandedText'
       image: 'Image'
       mobile: 'Mobile'
       rich_search: 'RichSearch'
@@ -570,8 +571,15 @@ orders:
       - editorial_status
       - forward_compatibility_map
       - id
+      - final_urls
       - status
       - type
+      - final_urls
+      - text
+      - path1
+      - path2
+      - title_part_1
+      - title_part_2
     ad_group:
       - ad_distribution
       - ad_rotation
@@ -632,6 +640,14 @@ orders:
       - display_url
       - text
       - title
+    expanded_text_ad:
+      - final_urls
+      - text
+      - status
+      - path_1
+      - path_2
+      - title_part_1
+      - title_part_2
     location_target:
       - id
       - city_target

@@ -329,6 +329,31 @@ module BingAdsApi
 			return get_response_hash(response, __method__)
 		end
 
+		# Public : Delete one or more ad_groups on the specified account
+		#
+		# Author:: dmitrii@webstreak.com
+		#
+		# === Parameters
+		# account_id - account that owns the campaigns
+		# campaign_id - campaign that owns the adgroups
+		# ad_groups - ad_groups to be deleted
+		# === Examples
+		#   service.delete_ad_groups(1, [1,2,3])
+		#   # =>  true
+		#
+		# Returns:: boolean. true if the delete was successful. false otherwise
+		#
+		# Raises:: exception
+		def delete_ad_groups(campaign_id, ad_group_ids)
+			message = {
+				:campaign_id => campaign_id,
+				:ad_group_ids => {"ins1:long" => ad_group_ids}
+			}
+			response = call(:delete_ad_groups, message)
+			return get_response_hash(response, __method__)
+		end
+
+
 
 		# Public : Obtains all the ads associated to the specified ad group
 		#
@@ -344,9 +369,9 @@ module BingAdsApi
 		# Returns:: An array of BingAdsApi::Ad
 		#
 		# Raises:: exception
-		def get_ads_by_ad_group_id(ad_group_id)
+		def get_ads_by_ad_group_id(ad_group_id, ad_type)
 			response = call(:get_ads_by_ad_group_id,
-				{ad_group_id: ad_group_id})
+				{ad_group_id: ad_group_id, ad_types: { ad_type: ad_type } } )
 			response_hash = get_response_hash(response, __method__)
 			response_ads = [response_hash[:ads][:ad]].flatten.compact
 			ads = response_ads.map { |ad_hash| initialize_ad(ad_hash) }

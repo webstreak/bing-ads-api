@@ -1,4 +1,4 @@
-# -*- encoding : utf-8 -*-
+ # -*- encoding : utf-8 -*-
 require 'spec_helper'
 
 # Author:: jlopezn@neonline.cl
@@ -228,6 +228,28 @@ describe BingAdsApi::CampaignManagement do
 			campaign_id = BingAdsFactory.create_campaign
 			@ad_group_id = BingAdsFactory.create_ad_group(campaign_id)
 		end
+    
+    describe "expanded text ads" do
+
+			it "should add a single ad" do
+
+        text_ad = BingAdsApi::ExpandedTextAd.new(
+          final_urls: {'ins1:string'=> 'http://test.com'},
+          status: BingAdsApi::Ad::ACTIVE,
+          text: 'Expanded Text Ad',
+          title_part_1: 'Expanded Title',
+          title_part_2: 'Expanded Title 2',
+          path_1: 'test',
+          path_2: 'test'
+				)
+
+				response = service.add_ads(@ad_group_id, text_ad)
+				expect(response).not_to be_nil
+				expect(response[:partial_errors]).to be_nil
+				expect(response[:ad_ids][:long]).not_to be_nil
+			end
+    end
+
 
 		describe "text ads" do
 
