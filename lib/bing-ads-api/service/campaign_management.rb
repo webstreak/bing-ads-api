@@ -687,6 +687,30 @@ module BingAdsApi
 
 			return response_hash
 		end
+    
+    # Public : Delete one or more keywords on the specified adgroup
+		#
+		# Author:: dmitrii@webstreak.com
+		#
+		# === Parameters
+		# ad_group_id - long with the ad group id
+		# keywords_ids - array of BingAdsApi::Ad subclasses instances to update
+		# === Examples
+		#   service.delete_keywords(1, [1,2,3])
+		#   # =>  true
+		#
+		# Returns:: boolean. true if the delete was successful. false otherwise
+		#
+		# Raises:: exception
+		def delete_keywords(ad_group_id, keyword_ids)
+			message = {
+				:ad_group_id => ad_group_id,
+				:keyword_ids => {"ins1:long" => keyword_ids}
+			}
+			response = call(:delete_keywords, message)
+			return get_response_hash(response, __method__)
+		end
+
 
 		private
 			def get_service_name
