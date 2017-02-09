@@ -13,7 +13,8 @@ module BingAdsApi
 
 		attr_accessor :id,
 			:city_target,
-      :radius_target
+      :radius_target,
+      :postal_code_target
 
     def to_hash(keys = :camelcase)
 			hash = super(keys)

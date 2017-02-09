@@ -205,6 +205,30 @@ module BingAdsApi
 			response = call(:delete_campaigns, message)
 			return get_response_hash(response, __method__)
 		end
+    
+    # Public : Returns all the ad groups that belongs to the
+		# specified campaign
+		#
+		# Author:: dmitrii@webstreak.com
+		#
+		# === Parameters
+		# campaign_id   - campaign id
+		#
+		# === Examples
+		#   service.get_targets_by_campaign_ids([1,2,3])
+		#   # => Array[Targets]
+		#
+		# Returns:: Array with all the targets present in campaign_id
+		#
+		# Raises:: exception
+		def get_targets_by_campaign_ids(campaign_ids)
+			response = call(:get_targets_by_campaign_ids,
+        :campaign_ids => {"ins1:long" => campaign_ids})
+			response_hash = get_response_hash(response, __method__)
+      targets = [response_hash[:targets][:target]]
+			return extract_targets(targets)
+		end
+
 
 
 		# Public : Returns all the ad groups that belongs to the
@@ -745,6 +769,75 @@ module BingAdsApi
 				end
 				return ad
 			end
+      
+      def extract_targets(targets)
+        location_targets = []
+        return location_targets if targets.blank?
+        targets.each do |target|
+          if target[:location].present?
+            city_target = extract_city_target(target[:location])
+            radius_target = extract_radius_target(target[:location])
+            postal_code_target = extract_postal_code_target(target[:location])
+            location_target = BingAdsApi::LocationTarget.new(
+              id: target[:id],
+              city_target: city_target,
+              radius_target: radius_target,
+              postal_code_target: postal_code_target
+            )
+            location_targets << location_target
+          end
+        end
+        return location_targets
+      end
+    
+      def extract_radius_target(target)
+        radius_target = nil
+        return radius_target if target[:radius_target].blank?
+        radius_target_bids = extract_bids(target[:radius_target])
+        if radius_target_bids.present?
+          radius_target = BingAdsApi::RadiusTarget.new(bids: radius_target_bids)
+        end
+        return radius_target
+      end
+
+      def extract_postal_code_target(target)
+        postal_code_target = nil
+        return postal_code_target if target[:postal_code_target].blank?
+        postal_code_target_bids = extract_bids(target[:postal_code_target])
+        if postal_code_target_bids.present?
+          postal_code_target = BingAdsApi::PostalCodeTarget.new(bids: postal_code_target_bids)
+        end
+        return postal_code_target
+      end
+
+    
+      def extract_city_target(target)
+        city_target = nil
+        return city_target if target[:city_target].blank?
+        city_target_bids = extract_bids(target[:city_target])
+        if city_target_bids.present?
+          city_target = BingAdsApi::CityTarget.new(bids: city_target)
+        end
+        return city_target
+      end
+      
+      def extract_bids(target)
+        bids = []
+        if target[:bids].present?
+          target[:bids].each do |name,bid|
+            case name
+            when :radius_target_bid
+              bids << BingAdsApi::RadiusTargetBid.new(bid)
+            when :city_target_bid
+              bids << BingAdsApi::CityTargetBid.new(bid)
+            when :postal_code_target_bid
+              bids << BingAdsApi::PostalCodeTargetBid.new(bid)
+            end
+          end
+        end
+        return bids
+      end
+
 	end
 
 end
