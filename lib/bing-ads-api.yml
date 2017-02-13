@@ -598,6 +598,12 @@ orders:
       - search_bid
       - start_date
       - status
+    budget:
+      - amount
+      - association_count
+      - budget_type
+      - id
+      - name
     campaign:
       - budget_type
       - conversion_tracking_enabled

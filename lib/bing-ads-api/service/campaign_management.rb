@@ -44,6 +44,33 @@ module BingAdsApi
 		## Operations Wrappers ##
 		#########################
 
+    # Public : Returns all the budgets found in the specified account
+		#
+		# Author:: dmitrii@webstreak.com
+		#
+		# === Parameters
+		# budget_ids  
+		#
+		# === Examples
+		#   campaign_management_service.get_campaigns_by_account_id(1)
+		#   # => Array[BingAdsApi::Campaign]
+		#   will return all budgets in the specified accunt if no budget_ids provided 
+		#
+		# Returns:: Array of BingAdsApi::Budget
+		#
+		# Raises:: exception
+		def get_budgets_by_ids(budget_ids)
+			response = call(:get_budgets_by_ids,
+				{ budget_ids: budget_ids })
+			response_hash = get_response_hash(response, __method__)
+			response_budgets = [response_hash[:budgets][:budget]].flatten.compact
+			budgets = response_budgets.map do |budget_hash|
+				BingAdsApi::Budget.new(budget_hash)
+			end
+			return budgets
+		end
+
+
 		# Public : Returns all the campaigns found in the specified account
 		#
 		# Author:: jlopezn@neonline.cl
