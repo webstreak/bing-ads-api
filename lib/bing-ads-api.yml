@@ -562,6 +562,19 @@ constants:
         device_type: "DeviceType"
         keywords: "Keywords"
         language_code: "LanguageCode"
+    budget_summary_report:
+      type: "BudgetSummaryReportRequest"
+      columns:
+        account_name: "AccountName"
+        account_number: "AccountNumber"
+        account_id: "AccountId"
+        campaign_name: "CampaignName"
+        campaign_id: "CampaignId"
+        data: "Date"
+        currency_code: "CurrencyCode"
+        monthly_budget: "MonthlyBudget"
+        daily_spend: "DailySpend"
+        month_to_date_spend: "MonthToDateSpend"
 
 # All data object attribute orderings are here
 orders:
