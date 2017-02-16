@@ -69,6 +69,29 @@ module BingAdsApi
 			end
 			return budgets
 		end
+    
+    # Public : Returns all the campaigns found in the specified account
+		#
+		# Author:: dmitrii@webstreak.com
+		#
+		# === Parameters
+		# budget_id 
+		#
+		# === Examples
+		#   campaign_management_service.get_campaign_ids_by_budget_ids_id(1)
+		#   # => Array[1,2,3]
+		#
+		# Returns:: Array of Campaing ids
+		#
+		# Raises:: exception
+		def get_campaign_ids_by_budget_ids(budget_ids)
+			response = call(:get_campaign_ids_by_budget_ids,
+			  { budget_ids: {"ins1:long" => budget_ids } } )
+			response_hash = get_response_hash(response, __method__)
+			campaign_ids = response_hash[:campaign_id_collection][:id_collection][:ids][:long]
+			return campaign_ids
+		end
+
 
 
 		# Public : Returns all the campaigns found in the specified account
