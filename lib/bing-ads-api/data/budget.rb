@@ -25,9 +25,13 @@ module BingAdsApi
       :budget_type,
       :id,
       :name
-		
-	end
- 
+
+    def to_hash(keys = :underscore)
+			hash = super(keys)
+			hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:Budget"
+			return hash
+		end
+
   private
 
     # Internal: Retrieve the ordered array of keys corresponding to this data
@@ -38,5 +42,7 @@ module BingAdsApi
       super.concat(BingAdsApi::Config.instance.
         campaign_management_orders['budget'])
     end
+
+  end
 
 end

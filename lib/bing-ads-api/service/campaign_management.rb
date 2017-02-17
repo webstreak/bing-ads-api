@@ -49,12 +49,45 @@ module BingAdsApi
 		# Author:: dmitrii@webstreak.com
 		#
 		# === Parameters
-		# budget_ids  
+		# budget_ids
 		#
 		# === Examples
 		#   campaign_management_service.get_campaigns_by_account_id(1)
 		#   # => Array[BingAdsApi::Campaign]
-		#   will return all budgets in the specified accunt if no budget_ids provided 
+		#   will return all budgets in the specified accunt if no budget_ids provided
+		#
+		# Returns:: Array of BingAdsApi::Budget
+		#
+		# Raises:: exception
+		def update_budgets(budgets)
+      budgets.map!{ |budget| budget.to_hash(:camelcase) }
+			response = call(:update_budgets,
+				{ budgets: { budget: budgets  } } )
+			response_hash = get_response_hash(response, __method__)
+
+      # Checks if there are partial errors in the request
+			if response_hash[:partial_errors].key?(:batch_error)
+				partial_errors = BingAdsApi::PartialErrors.new(
+					response_hash[:partial_errors])
+				response_hash[:partial_errors] = partial_errors
+			else
+				response_hash.delete(:partial_errors)
+			end
+
+			return response_hash
+
+		end
+
+    # Public : Updates budgets
+		#
+		# Author:: dmitrii@webstreak.com
+		#
+		# === Parameters
+		# Array of BingAdsApi::Budget
+		#
+		# === Examples
+		#   campaign_management_service.update_budgets([BingAdsApi::Budget])
+		#   will return all budgets in the specified accunt if no budget_ids provided
 		#
 		# Returns:: Array of BingAdsApi::Budget
 		#
@@ -69,13 +102,13 @@ module BingAdsApi
 			end
 			return budgets
 		end
-    
+
     # Public : Returns all the campaigns found in the specified account
 		#
 		# Author:: dmitrii@webstreak.com
 		#
 		# === Parameters
-		# budget_id 
+		# budget_id
 		#
 		# === Examples
 		#   campaign_management_service.get_campaign_ids_by_budget_ids_id(1)
@@ -255,7 +288,7 @@ module BingAdsApi
 			response = call(:delete_campaigns, message)
 			return get_response_hash(response, __method__)
 		end
-    
+
     # Public : Returns all the ad groups that belongs to the
 		# specified campaign
 		#
@@ -761,7 +794,7 @@ module BingAdsApi
 
 			return response_hash
 		end
-    
+
     # Public : Delete one or more keywords on the specified adgroup
 		#
 		# Author:: dmitrii@webstreak.com
@@ -819,7 +852,7 @@ module BingAdsApi
 				end
 				return ad
 			end
-      
+
       def extract_targets(targets)
         location_targets = []
         return location_targets if targets.blank?
@@ -839,7 +872,7 @@ module BingAdsApi
         end
         return location_targets
       end
-    
+
       def extract_radius_target(target)
         radius_target = nil
         return radius_target if target[:radius_target].blank?
@@ -860,7 +893,7 @@ module BingAdsApi
         return postal_code_target
       end
 
-    
+
       def extract_city_target(target)
         city_target = nil
         return city_target if target[:city_target].blank?
@@ -870,7 +903,7 @@ module BingAdsApi
         end
         return city_target
       end
-      
+
       def extract_bids(target)
         bids = []
         if target[:bids].present?
