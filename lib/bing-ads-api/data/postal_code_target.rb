@@ -15,7 +15,7 @@ module BingAdsApi
 	class PostalCodeTarget < BingAdsApi::DataObject
 
 		attr_accessor :bids
-    
+
     def to_hash(keys = :camelcase)
 			hash = super(keys)
 			return hash

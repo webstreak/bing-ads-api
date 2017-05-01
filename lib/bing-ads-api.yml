@@ -9,11 +9,13 @@ wsdl:
   sandbox:
     campaign_management: "https://campaign.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.sandbox.bingads.microsoft.com/Api/CustomerManagement/v9/CustomerManagementService.svc?singleWsdl"
+    customer_billing: "https://clientcenter.api.sandbox.bingads.microsoft.com/Api/Billing/v11/CustomerBillingService.svc?singleWsdl"
     reporting: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/Reporting/v9/ReportingService.svc?singleWsdl"
     bulk: "https://bulk.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/BulkService.svc?singleWsdl"
   production:
     campaign_management: "https://campaign.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.bingads.microsoft.com/Api/CustomerManagement/v9/CustomerManagementService.svc?singleWsdl"
+    customer_billing: "https://clientcenter.api.sandbox.bingads.microsoft.com/Api/Billing/v11/CustomerBillingService.svc?singleWsdl"
     reporting: "https://api.bingads.microsoft.com/Api/Advertiser/Reporting/v9/ReportingService.svc?singleWsdl"
     bulk: "https://bulk.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/BulkService.svc?singleWsdl"
 
@@ -182,6 +184,12 @@ constants:
       last_six_months: 'LastSixMonths'
       this_year: 'ThisYear'
       last_year: 'LastYear'
+  # Constansts specific for customer billing management services
+  customer_billing:
+    predicate:
+      field: 'Field'
+      operator: 'Operator'
+      value: 'Value'
   # Constansts specific for campaign management services
   campaign_management:
     budget_limit_type:
@@ -578,6 +586,11 @@ constants:
 
 # All data object attribute orderings are here
 orders:
+  customer_billing:
+    predicate:
+      - field
+      - operator
+      - value
   campaign_management:
     ad:
       - device_preference
