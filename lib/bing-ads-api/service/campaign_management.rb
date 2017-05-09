@@ -121,7 +121,11 @@ module BingAdsApi
 			response = call(:get_campaign_ids_by_budget_ids,
 			  { budget_ids: {"ins1:long" => budget_ids } } )
 			response_hash = get_response_hash(response, __method__)
-			campaign_ids = response_hash[:campaign_id_collection][:id_collection][:ids][:long]
+      begin
+			  campaign_ids = response_hash[:campaign_id_collection][:id_collection][:ids][:long]
+      rescue
+        campaign_ids = []
+      end
 			return campaign_ids
 		end
 
@@ -210,7 +214,7 @@ module BingAdsApi
       response = call(:add_targets_to_library, message)
       return get_response_hash(response, __method__)
     end
-    
+
     # Public : Adds a target to the specified campaign
 		#
 		# Author:: webstreak@webstreak.com
