@@ -11,14 +11,13 @@ module BingAdsApi
     #   # => <BingAdsApi::Bid>
     class CityTargetBid < BingAdsApi::DataObject
 
-        attr_accessor :bid_adjustment,
-      :city,
-      :is_excluded
-      end
+        attr_accessor :bid_adjustment, :city, :is_excluded
     
-   def to_hash(keys = :camelcase)
-            hash = super(keys)
-            return hash
-        end
+      def to_hash(keys = :camelcase)
+        hash = super(keys)
+        return hash
+      end
+
+    end
 
 end

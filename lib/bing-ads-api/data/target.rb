@@ -11,28 +11,13 @@ module BingAdsApi
     #
     class Target < BingAdsApi::DataObject
 
-        attr_accessor :id,
-      :location
+        attr_accessor :id, :location
 
-
-            # Internal: Retrieve the ordered array of keys corresponding to this data
-            # object.
-            #
-            # Author: alex.cavalli@offers.com
         def to_hash(keys = :camelcase)
             hash = super(keys)
             return hash
-    end
-
-    private
-
-#    def get_key_order
-#         super.concat(BingAdsApi::Config.instance.
-#           campaign_management_orders['target'])
-#       end
-
+        end
 
     end
-
     
 end

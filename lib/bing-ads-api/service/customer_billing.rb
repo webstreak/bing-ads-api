@@ -36,7 +36,7 @@ module BingAdsApi
         #   }
         #   service = BingAdsApi::CampaignManagement.new(options)
         def initialize(options={})
-            super(options)
+          super(options)
         end
 
 
@@ -44,64 +44,54 @@ module BingAdsApi
         ## Operations Wrappers ##
         #########################
 
-
-    # Public : Returns all the insertion orders found in the specified account
+        # Public : Returns insertion orders based on specific conditions
         #
         # Author:: dmitrii@webstreak.com
         #
         # === Parameters
-        # account_id
-        #
-        # === Examples
-        #   customer_billing_service.get_insertion_orders_by_account_id(1)
-        #   # => Array[1,2,3]
+        # predicates
         #
         # Returns:: Array of Insertion Orders
         #
         # Raises:: exception
-        def get_insertion_orders_by_account_id(account_id)
-            response = call(:get_insertion_orders_by_account,
-              { account_id: account_id } )
-            response_hash = get_response_hash(response, __method__)
-            #campaign_ids = response_hash[:campaign_id_collection][:id_collection][:ids][:long]
-            #return campaign_ids
-      return response_hash
+        def search_insertion_orders(account_id, predicates)
+          #predicate = BingAdsApi::Predicate.new(field: 'AccountId', operator: 'Equals', value: account_id)
+          if predicates.is_a? Array
+            predicates_for_soap = predicates.map{ |p| p.to_hash(:camelcase) }
+          elsif predicates.is_a? BingAdsApi::Predicate
+            predicates_for_soap = predicates.to_hash(:camelcase)
+          else
+            raise "predicates must be an array or instance of BingAdsApi::Predicate"
+          end
+          response = call(:search_insertion_orders,
+            { predicates: { "ins1:Predicate" => predicates_for_soap },
+              ordering: {
+                  "ins1:OrderBy" => {
+                  "ins1:Field" => 'Id',
+                  "ins1:Order" => 'Ascending'
+                }
+              },
+              page_info: {
+                "ins1:Index" => 0,
+                "ins1:Size" => 10
+              }
+            }
+          )
+          response_hash = get_response_hash(response, __method__)
+          response_orders = [response_hash[:insertion_orders][:insertion_order]].flatten.compact
+          insertion_orders = response_orders.map{ |insertion_order_hash| BingAdsApi::InsertionOrder.new(insertion_order_hash) }
+          return insertion_orders
         end
 
-    # Public : Returns insertion orders based on specific conditions
-        #
-        # Author:: dmitrii@webstreak.com
-        #
-        # === Parameters
-        # ordering
-    # page_info
-    # predicates
-        #
-        # Returns:: Array of Insertion Orders
-        #
-        # Raises:: exception
-        def search_insertion_orders(account_id)
-      #predicate = BingAdsApi::Predicate.new(field: 'AccountId', operator: 'Equals', value: account_id)
-            response = call(:search_insertion_orders,
-              { predicates: {
-            predicate: { field: 'AccountId', operator: 'Equals', value: account_id }
-          }
-        }
-      )
-            response_hash = get_response_hash(response, __method__)
-            #campaign_ids = response_hash[:campaign_id_collection][:id_collection][:ids][:long]
-            #return campaign_ids
-      return response_hash
+        def add_insertion_order(insertion_order)
+          response = call(:add_insertion_order, { insertion_order: insertion_order.to_hash(:camelcase) } )
         end
-
 
     private
 
       def get_service_name
         "customer_billing"
       end
-
-
 
     end
 

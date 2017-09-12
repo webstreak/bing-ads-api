@@ -118,7 +118,9 @@ module BingAdsApi
           convert_request_keys_to: KEYS_CASE,
           wsdl: self.wsdl_url,
           namespace_identifier: NAMESPACE,
-          soap_header: build_headers
+          soap_header: build_headers,
+          log_level: :debug,
+          log: true
         }
         settings.merge!(client_settings) if client_settings
 
@@ -138,6 +140,7 @@ module BingAdsApi
           headers["#{NAMESPACE.to_s}:UserName"] = self.username
           headers["#{NAMESPACE.to_s}:Password"] = self.password
         end
+        puts headers
         return headers
       end
   end

@@ -16,10 +16,10 @@ module BingAdsApi
 
         attr_accessor :bids
     
-    def to_hash(keys = :camelcase)
-            hash = super(keys)
-            return hash
-    end
+      def to_hash(keys = :camelcase)
+        hash = super(keys)
+        return hash
+      end
 
     end
 
