@@ -85,6 +85,14 @@ module BingAdsApi
 
         def add_insertion_order(insertion_order)
           response = call(:add_insertion_order, { insertion_order: insertion_order.to_hash(:camelcase) } )
+          response_hash = get_response_hash(response, __method__)
+          return response_hash[:insertion_order_id]
+        end
+
+        def update_insertion_order(insertion_order)
+          response = call(:update_insertion_order, { insertion_order: insertion_order.to_hash(:camelcase) } )
+          response_hash = get_response_hash(response, __method__)
+          return response_hash
         end
 
     private
