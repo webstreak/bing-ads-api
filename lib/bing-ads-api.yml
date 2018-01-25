@@ -9,11 +9,13 @@ wsdl:
   sandbox:
     campaign_management: "https://campaign.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.sandbox.bingads.microsoft.com/Api/CustomerManagement/v9/CustomerManagementService.svc?singleWsdl"
+    customer_billing: "https://clientcenter.api.sandbox.bingads.microsoft.com/Api/Billing/v11/CustomerBillingService.svc?singleWsdl"
     reporting: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/Reporting/v9/ReportingService.svc?singleWsdl"
     bulk: "https://bulk.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/BulkService.svc?singleWsdl"
   production:
     campaign_management: "https://campaign.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.bingads.microsoft.com/Api/CustomerManagement/v9/CustomerManagementService.svc?singleWsdl"
+    customer_billing: "https://clientcenter.api.bingads.microsoft.com/Api/Billing/v11/CustomerBillingService.svc?singleWsdl" 
     reporting: "https://api.bingads.microsoft.com/Api/Advertiser/Reporting/v9/ReportingService.svc?singleWsdl"
     bulk: "https://bulk.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/BulkService.svc?singleWsdl"
 
@@ -182,6 +184,29 @@ constants:
       last_six_months: 'LastSixMonths'
       this_year: 'ThisYear'
       last_year: 'LastYear'
+  # Constansts specific for customer billing management services
+  customer_billing:
+    predicate:
+      field: 'Field'
+      operator: 'Operator'
+      value: 'Value'
+    insertion_order:
+      account_id: 'AccountId'
+      balance_amount: 'BalanceAmount'
+      booking_country_code: 'BookingCountryCode'
+      comment: 'Comment'
+      end_date: 'EndDate'
+      insertion_order_id: 'InsertionOrderId'
+      last_modified_by_user_id: 'LastModifiedByUserId'
+      last_modified_time: 'LastModifiedTime'
+      notification_threshold: 'NotificationThreshold'
+      reference_id: 'ReferenceId'
+      spend_cap_amount: 'SpendCapAmount'
+      start_date: 'StartDate'
+      name: 'Name'
+      status: 'Status'
+      purchase_order: 'PurchaseOrder'
+      change_pending_review: 'ChangePendingReview'
   # Constansts specific for campaign management services
   campaign_management:
     budget_limit_type:
@@ -578,6 +603,28 @@ constants:
 
 # All data object attribute orderings are here
 orders:
+  customer_billing:
+    predicate:
+      - field
+      - operator
+      - value
+    insertion_order:
+      - account_id
+      - balance_amount
+      - booking_country_code
+      - comment
+      - end_date
+      - insertion_order_id
+      - last_modified_by_user_id
+      - last_modified_time
+      - notification_threshold
+      - reference_id
+      - spend_cap_amount
+      - start_date
+      - name
+      - status
+      - purchase_order
+      - change_pending_review
   campaign_management:
     ad:
       - device_preference

@@ -27,32 +27,32 @@ module BingAdsApi
     #
     # === Example
     #
-	  #   request = BingAdsApi::ShareOfVoiceReportRequest.new(
-	  #     :format   => :xml,
-	  #     :language => :english,
-	  #     :report_name => "Me report",
-	  #     :aggregation => :hourly,
-	  #     :columns => [:account_name, :account_number, :time_period],
-	  #     # The filter is specified as a hash
-	  #     :filter => {
-	  #       # specifies the Bing expected String value
-	  #       :ad_distribution => "Search",
-	  #       :ad_type => "Text",
-	  #       :bid_match_type => "Exact",
-	  #       :delivered_match_type => "Exact",
-	  #       # specifies criteria as a snake case symbol
-	  #       :device_type => :tablet,
-	  #       :keyword_relevance => [3],
-	  #       :keywords => ["bing ads"],
-	  #       :language_code => ["EN"]},
-	  #     :max_rows => 10,
-	  #     :scope => {
-	  #       :account_ids => [123456, 234567],
-	  #       :campaigns => [<BingAdsApi::CampaignReportScope>],
-	  #       :ad_groups => [<BingAdsApi::AdGroupReportScope>] },
-	  #     :sort => [<BingAdsApi::KeywordPerformanceReportSort>]
-	  #     # predefined date
-	  #     :time => :this_week)
+      #   request = BingAdsApi::ShareOfVoiceReportRequest.new(
+      #     :format   => :xml,
+      #     :language => :english,
+      #     :report_name => "Me report",
+      #     :aggregation => :hourly,
+      #     :columns => [:account_name, :account_number, :time_period],
+      #     # The filter is specified as a hash
+      #     :filter => {
+      #       # specifies the Bing expected String value
+      #       :ad_distribution => "Search",
+      #       :ad_type => "Text",
+      #       :bid_match_type => "Exact",
+      #       :delivered_match_type => "Exact",
+      #       # specifies criteria as a snake case symbol
+      #       :device_type => :tablet,
+      #       :keyword_relevance => [3],
+      #       :keywords => ["bing ads"],
+      #       :language_code => ["EN"]},
+      #     :max_rows => 10,
+      #     :scope => {
+      #       :account_ids => [123456, 234567],
+      #       :campaigns => [<BingAdsApi::CampaignReportScope>],
+      #       :ad_groups => [<BingAdsApi::AdGroupReportScope>] },
+      #     :sort => [<BingAdsApi::KeywordPerformanceReportSort>]
+      #     # predefined date
+      #     :time => :this_week)
     def initialize(attributes={})
       raise Exception.new("Invalid columns") if !valid_columns(COLUMNS, attributes[:columns])
       raise Exception.new("Invalid filters") if !valid_filter(FILTERS, attributes[:filter])
