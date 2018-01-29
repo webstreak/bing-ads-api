@@ -66,10 +66,23 @@ module BingAdsApi
                 {customer_id: customer_id || self.client_proxy.customer_id, 
                 only_parent_accounts: only_parent_accounts.to_s})
             response_hash = get_response_hash(response, __method__)
-            accounts = response_hash[:accounts_info][:account_info].map do |account_hash|
+
+            # if is a single item it returns a hash instead of array.
+            account_info = response_hash[:accounts_info][:account_info]
+            account_info = [account_info] if account_info.is_a? Hash
+
+            accounts = account_info.map do |account_hash|
                 BingAdsApi::AccountInfo.new(account_hash)
             end
             return accounts
+        end
+
+        def get_customers_info(max_rows: 1)
+            response = call(:get_customers_info, 
+                {customer_name_filter: '', top_n: max_rows})
+            response_hash = get_response_hash(response, __method__)
+            
+            response_hash[:customers_info][:customer_info]
         end
 
 
