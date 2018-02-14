@@ -11,7 +11,7 @@ module BingAdsApi
         attr_accessor :client_proxy, :environment, :max_retry_attempts
 
         # Default logger for services
-        LOGGER = Logger.new(STDOUT)
+        #LOGGER = Logger.new(STDOUT)
 
 
         # Public : Constructor
@@ -87,18 +87,18 @@ module BingAdsApi
             retries_made = 0
             raise "You must provide an operation" if operation.nil?
             begin
-                LOGGER.debug "BingAdsApi Service"
-                LOGGER.debug "   Calling #{operation.to_s}"
-                LOGGER.debug "   Message: #{message}"
+                #LOGGER.debug "BingAdsApi Service"
+                #LOGGER.debug "   Calling #{operation.to_s}"
+                #LOGGER.debug "   Message: #{message}"
                 response = self.client_proxy.call(operation.to_sym,
                     message: message)
-                LOGGER.debug "response header:"
-                LOGGER.debug "\t#{response.header}"
+                #LOGGER.debug "response header:"
+                #LOGGER.debug "\t#{response.header}"
 
-                LOGGER.info "Operation #{operation.to_s} call success"
+                #LOGGER.info "Operation #{operation.to_s} call success"
                 return response.hash
             rescue Savon::SOAPFault => error
-                LOGGER.error "SOAP Error calling #{operation.to_s}: #{error.http.code}"
+                #LOGGER.error "SOAP Error calling #{operation.to_s}: #{error.http.code}"
                 fault_detail = error.to_hash[:fault][:detail]
                 if fault_detail.key?(:api_fault_detail)
                     api_fault_detail = BingAdsApi::ApiFaultDetail.new(fault_detail[:api_fault_detail])
@@ -112,10 +112,10 @@ module BingAdsApi
                     raise
                 end
             rescue Savon::HTTPError => error
-                LOGGER.error "Http Error calling #{operation.to_s}: #{error.http.code}"
+                #LOGGER.error "Http Error calling #{operation.to_s}: #{error.http.code}"
                 raise
             rescue Savon::InvalidResponseError => error
-                LOGGER.error "Invalid server reponse calling #{operation.to_s}"
+                #LOGGER.error "Invalid server reponse calling #{operation.to_s}"
                 raise
             rescue
                 # for any other exceptions, retry with an exponential backoff
