@@ -118,9 +118,7 @@ module BingAdsApi
           convert_request_keys_to: KEYS_CASE,
           wsdl: self.wsdl_url,
           namespace_identifier: NAMESPACE,
-          soap_header: build_headers,
-          log_level: :debug,
-          log: true
+          soap_header: build_headers
         }
         settings.merge!(client_settings) if client_settings
 
