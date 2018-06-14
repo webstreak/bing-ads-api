@@ -27,4 +27,11 @@ describe BingAdsApi::CustomerManagement do
         expect(response).to be_kind_of(Array)
     end
 
+
+    it "should get customers info" do
+        response = service.get_customers_info
+        expect(response).not_to be_nil
+        expect(response).to be_kind_of(Array)
+    end
+
 end

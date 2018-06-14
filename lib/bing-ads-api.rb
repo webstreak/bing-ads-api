@@ -9,6 +9,8 @@ require 'bing-ads-api/client_proxy'
 require 'bing-ads-api/soap_hasheable'
 require 'bing-ads-api/data_object'
 
+# Require Reporting helper objects
+Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'data', 'reporting', 'helpers', '*.rb')].each { |file| require file }
 
 # Require services
 Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'service', '*.rb')].each { |file| require file }
@@ -19,6 +21,8 @@ Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'data', '*.rb')].each { |f
 # Require bulk data objects
 Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'data', 'bulk', '*.rb')].each { |file| require file }
 
+Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'data', 'campaign_management', '*.rb')].each { |file| require file }
+
 
 # Require Fault objects
 require 'bing-ads-api/fault/application_fault'
@@ -28,9 +32,6 @@ require 'bing-ads-api/fault/api_fault_detail'
 require 'bing-ads-api/fault/batch_error'
 require 'bing-ads-api/fault/operation_error'
 require 'bing-ads-api/fault/partial_errors'
-
-# Require Reporting helper objects
-Dir[File.join(File.dirname(__FILE__), 'bing-ads-api', 'data', 'reporting', 'helpers', '*.rb')].each { |file| require file }
 
 # Require report request data objects
 require 'bing-ads-api/data/reporting/performance_report_request'

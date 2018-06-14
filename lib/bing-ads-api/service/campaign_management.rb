@@ -44,6 +44,47 @@ module BingAdsApi
         ## Operations Wrappers ##
         #########################
 
+        def get_account_properties(account_property_name)
+            response = call(:get_account_properties,
+                { account_property_names: { account_property_name: account_property_name  }})
+            response_hash = get_response_hash(response, __method__)
+            
+        end
+
+        # offline_conversion = BingAdsApi::OfflineConversion.new(
+        #        conversion_currency_code: currency_code,
+        #        conversion_name: conversion_name,
+        #        conversion_time: conversion_time,
+        #        conversion_value: conversion_value,
+        #        microsoft_click_id: msclkid)
+        # service.apply_offline_conversion offline_conversion
+        def apply_offline_conversion(offline_conversion)
+            response = call(:apply_offline_conversions,
+                { offline_conversions: { offline_conversion: offline_conversion.to_hash(:camelcase) }})
+            response_hash = get_response_hash(response, :apply_offline_conversions)
+
+            # Checks if there are partial errors in the request
+            if response_hash[:partial_errors].key?(:batch_error)
+                partial_errors = BingAdsApi::PartialErrors.new(
+                    response_hash[:partial_errors])
+                response_hash[:partial_errors] = partial_errors
+            else
+                response_hash.delete(:partial_errors)
+            end
+
+            response_hash
+        end
+
+        # ToDo not yet working, the idea is be able to send an array of conversion,
+        # this is how the api is really designed to work
+        def apply_offline_conversions(offline_conversions)
+            raise 'parameter must be an array' unless offline_conversions.is? Array
+
+            response = call(:apply_offline_conversions,
+                { offline_conversions: { offline_conversion: offline_conversion }})
+            response_hash = get_response_hash(response, __method__)
+        end
+
     # Public : Returns all the budgets found in the specified account
         #
         # Author:: dmitrii@webstreak.com

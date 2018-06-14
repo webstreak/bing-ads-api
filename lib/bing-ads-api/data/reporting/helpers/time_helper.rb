@@ -65,5 +65,11 @@ module BingAdsApi::Helpers
             end
         end
 
+
+        def to_ms_time(time)
+            return nil if time.nil?
+            time.utc.strftime '%Y-%m-%dT%H:%M:%S.%7NZ'
+        end
+
     end
 end

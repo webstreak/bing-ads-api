@@ -15,7 +15,7 @@ wsdl:
   production:
     campaign_management: "https://campaign.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V11/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.bingads.microsoft.com/Api/CustomerManagement/v11/CustomerManagementService.svc?singleWsdl"
-    customer_billing: "https://clientcenter.api.bingads.microsoft.com/Api/Billing/v11/CustomerBillingService.svc?singleWsdl"
+    customer_billing: "https://clientcenter.api.bingads.microsoft.com/Api/Billing/v11/CustomerBillingService.svc?singleWsdl" 
     reporting: "https://api.bingads.microsoft.com/Api/Advertiser/Reporting/v11/ReportingService.svc?singleWsdl"
     bulk: "https://bulk.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V10/BulkService.svc?singleWsdl"
 
