@@ -20,11 +20,11 @@ So far, I've just integrated some methods from +CampaignManagement+, +CustomerMa
 
 In all cases, you must initialize some service object with the authentication options
 Here's an example with the CampaignMangement service object
+=== Starting with Bing Ads API version 12, only OAuth authentication is supported via the AuthenticationToken header element. Managed credentials i.e., the UserName and Password header elements are not supported.
 
    options = {
+    :authentication_token => "SOME TOKEN",
    	:environment => :sandbox,
-   	:username => "desarrollo_neonline",
-   	:password => "neonline2013",
    	:developer_token => "BBD37VB98",
    	:customer_id => "21021746",
    	:account_id => "5978083"
@@ -38,9 +38,8 @@ Here's an example with the CampaignMangement service object
 
 Example of service object initialization:
    options = {
+    :authentication_token => "SOME TOKEN",
    	:environment => :sandbox,
-   	:username => "desarrollo_neonline",
-   	:password => "neonline2013",
    	:developer_token => "BBD37VB98",
    	:customer_id => "21021746",
    	:account_id => "5978083"
@@ -62,7 +61,7 @@ Example of service object initialization:
    	:name => name + " first name",
    	:status => BingAdsApi::Campaign::PAUSED,
    	:time_zone => BingAdsApi::Campaign::SANTIAGO),
-   
+
    BingAdsApi::Campaign.new(
    	:budget_type => BingAdsApi::Campaign::DAILY_BUDGET_STANDARD, 
    	:conversion_tracking_enabled => "false",
@@ -92,8 +91,7 @@ a object representation of the hash
 Example of service object initialization:
    options = {
    	:environment => :sandbox,
-   	:username => "desarrollo_neonline",
-   	:password => "neonline2013",
+    :authentication_token => "SOME TOKEN",
    	:developer_token => "BBD37VB98",
    	:customer_id => "21021746",
    	:account_id => "5978083"

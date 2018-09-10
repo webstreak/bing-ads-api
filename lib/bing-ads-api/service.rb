@@ -22,9 +22,8 @@ module BingAdsApi
         # * +options+ - Hash with autentication and environment settings
         #
         # === Options
+        #
         # * environment - +:production+ or +:sandbox+
-        # * username - Bing Ads username
-        # * passwrod - Bing Ads user's sign-in password
         # * developer_token - client application's developer access token
         # * customer_id - identifier for the customer that owns the account
         # * account_id - identifier of the account that own the entities in the request
@@ -33,8 +32,7 @@ module BingAdsApi
         # === Examples
         #   service = BingAdsApi::Service.new(
         #     :environment => :sandbox,
-        #     :username    => 'username',
-        #     :password    => 'pass',
+        #     :authentication_token => 'SOME_TOKEN'
         #     :developer_token => 'SOME_TOKEN',
         #     :account_id  => 123456,
         #     :customer_id => 654321,
@@ -49,8 +47,6 @@ module BingAdsApi
             # ClientProxy settings
             clientProxySettings = {
                 :authentication_token => options[:authentication_token],
-                :username => options[:username],
-                :password => options[:password],
                 :developer_token => options[:developer_token],
                 :account_id => options[:account_id],
                 :customer_id => options[:customer_id],
