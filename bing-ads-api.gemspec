@@ -19,5 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency "savon", "~> 2.5"
   s.add_dependency "rest-client"
   s.add_dependency "activesupport", ">= 4.2.5.2"
+  s.add_dependency "httparty"
   s.add_development_dependency "rspec"
 end

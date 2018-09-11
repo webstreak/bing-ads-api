@@ -8,7 +8,7 @@ module BingAdsApi
     #
     class Service
 
-        attr_accessor :client_proxy, :environment, :max_retry_attempts
+        attr_accessor :client_proxy, :environment, :max_retry_attempts, :refresh_token, :client_id, :clientProxySettings
 
         # Default logger for services
         #LOGGER = Logger.new(STDOUT)
@@ -45,7 +45,7 @@ module BingAdsApi
             self.environment = options[:environment]
 
             # ClientProxy settings
-            clientProxySettings = {
+            self.clientProxySettings = {
                 :authentication_token => options[:authentication_token],
                 :developer_token => options[:developer_token],
                 :account_id => options[:account_id],
@@ -60,6 +60,13 @@ module BingAdsApi
             self.client_proxy = BingAdsApi::ClientProxy.new(clientProxySettings)
 
             self.max_retry_attempts = options[:max_retry_attempts] || 0
+            self.refresh_token = options[:refresh_token]
+            self.client_id = options[:client_id]
+
+        end
+
+        def initialize_proxy_client
+          self.client_proxy = BingAdsApi::ClientProxy.new(clientProxySettings)
         end
 
 
@@ -101,11 +108,16 @@ module BingAdsApi
                     raise BingAdsApi::ApiException.new(
                         api_fault_detail, "SOAP Error calling #{operation.to_s}")
                 elsif fault_detail.key?(:ad_api_fault_detail)
-                    ad_api_fault_detail = BingAdsApi::AdApiFaultDetail.new(fault_detail[:ad_api_fault_detail])
-                    raise BingAdsApi::ApiException.new(
-                        ad_api_fault_detail, "SOAP Error calling #{operation.to_s}")
+                  ad_api_fault_detail = BingAdsApi::AdApiFaultDetail.new(fault_detail[:ad_api_fault_detail])
+                  if ad_api_fault_detail.errors.select { |e| e.code == 109 } && retries_made < max_retry_attempts
+                    request_new_auth_token
+                    retries_made += 1
+                    retry
+                  end
+                  raise BingAdsApi::ApiException.new(
+                    ad_api_fault_detail, "SOAP Error calling #{operation.to_s}")
                 else
-                    raise
+                  raise
                 end
             rescue Savon::HTTPError => error
                 #LOGGER.error "Http Error calling #{operation.to_s}: #{error.http.code}"
@@ -147,6 +159,27 @@ module BingAdsApi
         end
 
         private
+
+          def request_new_auth_token
+            params = {
+              client_id: client_id,
+              scope: 'bingads.manage',
+              grant_type: 'refresh_token',
+              redirect_uri: 'https://login.microsoftonline.com/common/oauth2/nativeclient',
+              refresh_token: refresh_token
+            }
+            headers= {
+              "Accept" => "application/json",
+              "Content-Type" => "application/x-www-form-urlencoded",
+              "Host" => "login.live.com",
+            }
+            result = HTTParty.post("https://login.live.com/oauth20_token.srf", { body: params } )
+            if result.parsed_response['access_token']
+              clientProxySettings[:authentication_token] = result.parsed_response['access_token']
+              initialize_proxy_client
+            end
+
+          end
 
             # Private : This method must be overriden by specific services.
             # Returns:: the service name

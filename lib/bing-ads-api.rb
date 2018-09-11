@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 require 'savon'
+require 'httparty'
 require 'bing-ads-api/api_exception'
 require 'bing-ads-api/config'
 require 'bing-ads-api/constants'
