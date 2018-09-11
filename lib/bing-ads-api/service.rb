@@ -161,24 +161,11 @@ module BingAdsApi
         private
 
           def request_new_auth_token
-            params = {
-              client_id: client_id,
-              scope: 'bingads.manage',
-              grant_type: 'refresh_token',
-              redirect_uri: 'https://login.microsoftonline.com/common/oauth2/nativeclient',
-              refresh_token: refresh_token
-            }
-            headers= {
-              "Accept" => "application/json",
-              "Content-Type" => "application/x-www-form-urlencoded",
-              "Host" => "login.live.com",
-            }
-            result = HTTParty.post("https://login.live.com/oauth20_token.srf", { body: params } )
-            if result.parsed_response['access_token']
-              clientProxySettings[:authentication_token] = result.parsed_response['access_token']
-              initialize_proxy_client
-            end
-
+            api_client = BingAdsApi::ApiClient.new(client_id)
+            api_client.refresh_token = self.refresh_token
+            api_client.fetch_authentication_token!
+            clientProxySettings[:authentication_token] = api_client.authentication_token
+            initialize_proxy_client
           end
 
             # Private : This method must be overriden by specific services.
