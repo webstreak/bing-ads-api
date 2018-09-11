@@ -9,6 +9,7 @@ require 'bing-ads-api/service'
 require 'bing-ads-api/client_proxy'
 require 'bing-ads-api/soap_hasheable'
 require 'bing-ads-api/data_object'
+require 'bing-ads-api/api_client'
 
 
 # Require services
