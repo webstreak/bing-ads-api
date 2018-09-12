@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bing-ads-api (0.7.3)
+    bing-ads-api (0.7.4)
       activesupport (>= 4.2.5.2)
       httparty
       rest-client

@@ -458,7 +458,7 @@ module BingAdsApi
         def delete_ad_groups(campaign_id, ad_group_ids)
             message = {
                 :campaign_id => campaign_id,
-                :ad_group_ids => {"ins1:long" => ad_group_ids}
+                :ad_group_ids => {"ins0:long" => ad_group_ids}
             }
             response = call(:delete_ad_groups, message)
             return get_response_hash(response, __method__)
