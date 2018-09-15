@@ -641,21 +641,15 @@ orders:
       - title_part_1
       - title_part_2
     ad_group:
-      - ad_distribution
+      - cpc_bid
       - ad_rotation
-      - bidding_model
-      - broad_match_bid
-      - content_match_bid
       - end_date
-      - exact_match_bid
       - forward_compatibility_map
       - id
       - language
       - name
       - network
       - phrase_match_bid
-      - pricing_model
-      - cpc_bid
       - start_date
       - status
     budget:
