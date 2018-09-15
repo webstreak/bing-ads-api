@@ -655,7 +655,7 @@ orders:
       - network
       - phrase_match_bid
       - pricing_model
-      - search_bid
+      - cpc_bid
       - start_date
       - status
     budget:

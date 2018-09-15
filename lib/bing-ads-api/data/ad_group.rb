@@ -31,7 +31,7 @@ module BingAdsApi
             :content_match_bid,
             :exact_match_bid,
             :phrase_match_bid,
-      :search_bid,
+            :cpc_bid,
 
             :bidding_model,
             :pricing_model,
