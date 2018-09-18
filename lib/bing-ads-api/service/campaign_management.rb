@@ -119,7 +119,7 @@ module BingAdsApi
         # Raises:: exception
         def get_campaign_ids_by_budget_ids(budget_ids)
             response = call(:get_campaign_ids_by_budget_ids,
-              { budget_ids: {"ins1:long" => budget_ids } } )
+              { budget_ids: {"ins0:long" => budget_ids } } )
             response_hash = get_response_hash(response, __method__)
       begin
               campaign_ids = response_hash[:campaign_id_collection][:id_collection][:ids][:long]
@@ -287,7 +287,7 @@ module BingAdsApi
         def delete_campaigns(account_id, campaign_ids)
             message = {
                 :account_id => account_id,
-                :campaign_ids => {"ins1:long" => campaign_ids}
+                :campaign_ids => {"ins0:long" => campaign_ids}
             }
             response = call(:delete_campaigns, message)
             return get_response_hash(response, __method__)
@@ -310,7 +310,7 @@ module BingAdsApi
         # Raises:: exception
         def get_targets_by_campaign_ids(campaign_ids)
             response = call(:get_targets_by_campaign_ids,
-        :campaign_ids => {"ins1:long" => campaign_ids})
+        :campaign_ids => {"ins0:long" => campaign_ids})
             response_hash = get_response_hash(response, __method__)
       targets = [response_hash[:targets][:target]]
             return extract_targets(targets)
@@ -365,7 +365,7 @@ module BingAdsApi
 
             message = {
                 :campaign_id => campaign_id,
-                :ad_group_ids => {"ins1:long" => ad_groups_ids} }
+                :ad_group_ids => {"ins0:long" => ad_groups_ids} }
             response = call(:get_ad_groups_by_ids, message)
             response_hash = get_response_hash(response, __method__)
             response_ad_groups = [response_hash[:ad_groups][:ad_group]].flatten
@@ -510,7 +510,7 @@ module BingAdsApi
 
             message = {
                 :ad_group_id => ad_group_id,
-                :ad_ids => {"ins1:long" => ad_ids} }
+                :ad_ids => {"ins0:long" => ad_ids} }
             response = call(:get_ads_by_ids, message)
             response_hash = get_response_hash(response, __method__)
 
@@ -621,7 +621,7 @@ module BingAdsApi
 
             return response_hash
         end
-    
+
     # Public : Delete one or more ads on the specified adgroup
         #
         # Author:: dmitrii@webstreak.com
@@ -639,7 +639,7 @@ module BingAdsApi
         def delete_ads(ad_group_id, ad_ids)
             message = {
                 :ad_group_id => ad_group_id,
-                :ad_ids => {"ins1:long" => ad_ids}
+                :ad_ids => {"ins0:long" => ad_ids}
             }
             response = call(:delete_ads, message)
             return get_response_hash(response, __method__)
@@ -693,7 +693,7 @@ module BingAdsApi
         def get_keywords_by_ids(ad_group_id, keyword_ids)
             message = {
                 :ad_group_id => ad_group_id,
-                :keyword_ids => {"ins1:long" => keyword_ids} }
+                :keyword_ids => {"ins0:long" => keyword_ids} }
             response = call(:get_keywords_by_ids, message)
             response_hash = get_response_hash(response, __method__)
             response_keywords = [response_hash[:keywords][:keyword]].flatten
@@ -816,7 +816,7 @@ module BingAdsApi
         def delete_keywords(ad_group_id, keyword_ids)
             message = {
                 :ad_group_id => ad_group_id,
-                :keyword_ids => {"ins1:long" => keyword_ids}
+                :keyword_ids => {"ins0:long" => keyword_ids}
             }
             response = call(:delete_keywords, message)
             return get_response_hash(response, __method__)

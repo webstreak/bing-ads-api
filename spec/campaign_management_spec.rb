@@ -228,13 +228,13 @@ describe BingAdsApi::CampaignManagement do
             campaign_id = BingAdsFactory.create_campaign
             @ad_group_id = BingAdsFactory.create_ad_group(campaign_id)
         end
-    
+ 
     describe "expanded text ads" do
 
             it "should add a single ad" do
 
         text_ad = BingAdsApi::ExpandedTextAd.new(
-          final_urls: {'ins1:string'=> 'http://test.com'},
+          final_urls: {'ins0:string'=> 'http://test.com'},
           status: BingAdsApi::Ad::ACTIVE,
           text: 'Expanded Text Ad',
           title_part_1: 'Expanded Title',
