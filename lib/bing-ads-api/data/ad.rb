@@ -109,7 +109,7 @@ module BingAdsApi
       hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:ExpandedTextAd"
       new_hash = {}
       hash['FinalUrls'].each_pair do |k,v|
-        new_hash.merge!({k.downcase => v}) 
+        new_hash.merge!( { k.downcase => v } )
       end
       hash['FinalUrls'] = new_hash
       return hash

@@ -8,7 +8,7 @@ module BingAdsApi
 
         def to_hash(keys = :underscore)
           hash = super(keys)
-          hash = hash.map{ |k,v| ["ins1:#{k}", v] }.to_h
+          hash = hash.map{ |k,v| ["ins0:#{k}", v] }.to_h
           return hash
         end
 

@@ -822,6 +822,35 @@ module BingAdsApi
             return get_response_hash(response, __method__)
         end
 
+        def get_labels_by_ids(label_ids=[], index=0, per_page=1000)
+          message = {
+            :label_ids => label_ids,
+            :page_info => {
+              index: index,
+              size: per_page
+            }
+          }
+          response = call(:get_labels_by_ids, message)
+          return get_response_hash(response, __method__)
+        end
+
+        def add_labels(labels)
+          message = {
+            :labels => labels
+          }
+          response = call(:add_labels, message)
+          return get_response_hash(response, __method__)
+        end
+
+        def set_label_associations(entity_type, label_associations)
+          message = {
+            :entity_type => entity_type,
+            :label_associations => label_associations
+          }
+          response = call(:set_label_associations, message)
+          return get_response_hash(response, __method__)
+        end
+
 
         private
             def get_service_name

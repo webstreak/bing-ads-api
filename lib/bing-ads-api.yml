@@ -626,6 +626,11 @@ orders:
       - purchase_order
       - change_pending_review
   campaign_management:
+    label:
+      - color_code
+      - description
+      - id
+      - name
     ad:
       - device_preference
       - editorial_status
