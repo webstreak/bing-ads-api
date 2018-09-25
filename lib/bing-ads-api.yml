@@ -645,6 +645,7 @@ orders:
       - path2
       - title_part_1
       - title_part_2
+      - tracking_url_template
     ad_group:
       - cpc_bid
       - ad_rotation
@@ -713,6 +714,7 @@ orders:
       - path_2
       - title_part_1
       - title_part_2
+      - tracking_url_template
     location_target:
       - id
       - city_target
