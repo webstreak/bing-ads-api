@@ -26,7 +26,9 @@ module BingAdsApi
       :final_urls,
       :text,
       :title_part_1,
-      :title_part_2
+      :title_part_2,
+      :tracking_url_template
+
 
     private
 
@@ -95,7 +97,9 @@ module BingAdsApi
       :title_part_1,
       :title_part_2,
       :path_1,
-      :path_2
+      :path_2,
+      :tracking_url_template
+
 
     # Public : Specification of DataObject#to_hash method that ads the type attribute based on this specific class
     #
