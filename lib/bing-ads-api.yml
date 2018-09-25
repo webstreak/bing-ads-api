@@ -640,12 +640,13 @@ orders:
       - status
       - type
       - final_urls
+      - tracking_url_template
       - text
       - path1
       - path2
       - title_part_1
       - title_part_2
-      - tracking_url_template
+      
     ad_group:
       - cpc_bid
       - ad_rotation
@@ -708,13 +709,13 @@ orders:
       - title
     expanded_text_ad:
       - final_urls
+      - tracking_url_template
       - text
       - status
       - path_1
       - path_2
       - title_part_1
       - title_part_2
-      - tracking_url_template
     location_target:
       - id
       - city_target
