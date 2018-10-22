@@ -93,11 +93,11 @@ module BingAdsApi
   class ExpandedTextAd < BingAdsApi::Ad
 
     attr_accessor :final_urls,
+      :path_1,
+      :path_2,
       :text,
       :title_part_1,
       :title_part_2,
-      :path_1,
-      :path_2,
       :tracking_url_template
 
 

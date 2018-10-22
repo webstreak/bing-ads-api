@@ -201,12 +201,12 @@ module BingAdsApi
     def add_targets_to_library(account_id, targets)
       ts = []
       if targets.is_a? Array
-                ts = targets.map{ |target| target.to_hash(:camelcase) }
-            elsif targets.is_a? BingAdsApi::Target
-                ts = targets.to_hash
-            else
-                raise "targets must be an array of BingAdsApi::Targets"
-            end
+        ts = targets.map{ |target| target.to_hash(:camelcase) }
+      elsif targets.is_a? BingAdsApi::Target
+        ts = targets.to_hash
+      else
+        raise "targets must be an array of BingAdsApi::Targets"
+     end
       message = {
         :account_id => account_id,
         :targets => {:target => ts}

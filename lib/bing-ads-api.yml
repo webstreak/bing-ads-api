@@ -709,11 +709,11 @@ orders:
       - title
     expanded_text_ad:
       - final_urls
+      - path_1
+      - path_2
       - tracking_url_template
       - text
       - status
-      - path_1
-      - path_2
       - title_part_1
       - title_part_2
     location_target:
