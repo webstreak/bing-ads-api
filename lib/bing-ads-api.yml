@@ -638,15 +638,14 @@ orders:
       - id
       - final_urls
       - status
+      - tracking_url_template
       - type
       - final_urls
       - path1
       - path2
-      - tracking_url_template
       - text
       - title_part_1
       - title_part_2
-
     ad_group:
       - cpc_bid
       - ad_rotation
@@ -709,9 +708,9 @@ orders:
       - title
     expanded_text_ad:
       - final_urls
+      - tracking_url_template
       - path_1
       - path_2
-      - tracking_url_template
       - text
       - status
       - title_part_1
