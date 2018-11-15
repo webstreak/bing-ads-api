@@ -11,14 +11,14 @@ module BingAdsApi
     #   # => <BingAdsApi::Bid>
     class RadiusTargetBid < BingAdsApi::DataObject
 
-        attr_accessor :bid_adjustment,
+      attr_accessor :bid_adjustment,
       :latitude_degrees,
       :longitude_degrees,
       :radius,
       :radius_unit,
       :is_excluded
       end
-    
+
    def to_hash(keys = :camelcase)
             hash = super(keys)
             return hash

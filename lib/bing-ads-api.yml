@@ -720,6 +720,15 @@ orders:
       - city_target
       - state_target
       - postal_code_target
+    criterion:
+      - latitude_degrees
+      - longitude_degrees
+      - name
+      - radius
+      - radius_unit
+    campaign_criterion:
+      - campaign_id
+      - criterions
   reporting:
     report_request:
       - format

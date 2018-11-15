@@ -19,5 +19,5 @@ module BingAdsApi
         end
 
     end
-    
+
 end

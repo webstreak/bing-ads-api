@@ -60,22 +60,20 @@ module BingAdsApi
         #
         # Raises:: exception
         def update_budgets(budgets)
-      budgets.map!{ |budget| budget.to_hash(:camelcase) }
-            response = call(:update_budgets,
-                { budgets: { budget: budgets  } } )
-            response_hash = get_response_hash(response, __method__)
+          budgets.map!{ |budget| budget.to_hash(:camelcase) }
+          response = call(:update_budgets, { budgets: { budget: budgets  } } )
+          response_hash = get_response_hash(response, __method__)
 
       # Checks if there are partial errors in the request
-            if response_hash[:partial_errors].key?(:batch_error)
-                partial_errors = BingAdsApi::PartialErrors.new(
-                    response_hash[:partial_errors])
-                response_hash[:partial_errors] = partial_errors
-            else
-                response_hash.delete(:partial_errors)
-            end
+          if response_hash[:partial_errors].key?(:batch_error)
+              partial_errors = BingAdsApi::PartialErrors.new(
+                  response_hash[:partial_errors])
+              response_hash[:partial_errors] = partial_errors
+          else
+              response_hash.delete(:partial_errors)
+          end
 
-            return response_hash
-
+          return response_hash
         end
 
     # Public : Updates budgets
@@ -93,14 +91,14 @@ module BingAdsApi
         #
         # Raises:: exception
         def get_budgets_by_ids(budget_ids)
-            response = call(:get_budgets_by_ids,
-                { budget_ids: budget_ids })
-            response_hash = get_response_hash(response, __method__)
-            response_budgets = [response_hash[:budgets][:budget]].flatten.compact
-            budgets = response_budgets.map do |budget_hash|
-                BingAdsApi::Budget.new(budget_hash)
-            end
-            return budgets
+          response = call(:get_budgets_by_ids,
+              { budget_ids: budget_ids })
+          response_hash = get_response_hash(response, __method__)
+          response_budgets = [response_hash[:budgets][:budget]].flatten.compact
+          budgets = response_budgets.map do |budget_hash|
+              BingAdsApi::Budget.new(budget_hash)
+          end
+          return budgets
         end
 
     # Public : Returns all the campaigns found in the specified account
@@ -848,6 +846,16 @@ module BingAdsApi
             :label_associations => label_associations
           }
           response = call(:set_label_associations, message)
+          return get_response_hash(response, __method__)
+        end
+
+        def add_campaign_criterions(criterions)
+          criterions.map!{|c| { campaign_criterion: c.to_hash } }
+          message = {
+            campaign_criterions: criterions,
+            criterion_type: 'Targets'
+          }
+          response = call(:add_campaign_criterions, message)
           return get_response_hash(response, __method__)
         end
 

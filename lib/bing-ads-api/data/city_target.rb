@@ -14,8 +14,8 @@ module BingAdsApi
     #
     class CityTarget < BingAdsApi::DataObject
 
-        attr_accessor :bids
-    
+      attr_accessor :bids
+
       def to_hash(keys = :camelcase)
         hash = super(keys)
         return hash
