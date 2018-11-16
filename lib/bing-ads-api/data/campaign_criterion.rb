@@ -2,7 +2,9 @@ module BingAdsApi
 
   class CampaignCriterion < BingAdsApi::DataObject
     attr_accessor :campaign_id,
-      :criterion
+      :criterion,
+      :id,
+      :criterion_bid
 
     def to_hash(keys = :camelcase)
       hash = super(keys)

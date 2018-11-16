@@ -729,6 +729,11 @@ orders:
     campaign_criterion:
       - campaign_id
       - criterions
+      - id
+      - criterion_bid
+    criterion_bid:
+      - amount
+      - multiplier
   reporting:
     report_request:
       - format

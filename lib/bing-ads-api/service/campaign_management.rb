@@ -859,6 +859,41 @@ module BingAdsApi
           return get_response_hash(response, __method__)
         end
 
+        def get_campaign_criterions_by_ids(campaign_id, criterion_type, ids=[])
+          message = {
+            campaign_criterions_ids: {"ins0:long" => ids},
+            campaign_id: campaign_id,
+            criterion_type: criterion_type
+          }
+          response = call(:get_campaign_criterions_by_ids, message)
+          response_hash = get_response_hash(response, __method__)
+          response_criterions = [response_hash[:campaign_criterions][:campaign_criterion]].flatten
+          criterions = response_criterions.map do |campaign_criterion_hash|
+            criterion = BingAdsApi::Criterion.new(campaign_criterion_hash.delete(:criterion).merge(criterion_type: "#{criterion_type}Criterion"))
+              BingAdsApi::CampaignCriterion.new(campaign_id: campaign_criterion_hash[:campaign_id], criterion: criterion, id: campaign_criterion_hash[:id])
+          end
+          return criterions
+        end
+
+        def update_campaign_criterions(criterions, criterion_type )
+          criterions.map!{|c| { campaign_criterion: c.to_hash } }
+          message = {
+            campaign_criterions: criterions,
+            criterion_type: criterion_type
+          }
+          response = call(:update_campaign_criterions, message)
+          return get_response_hash(response, __method__)
+        end
+
+        def delete_campaign_criterions(campaign_id, ids, criterion_type)
+          message = {
+            :campaign_criterion_ids => {"ins0:long" => ids},
+            :campaign_id => campaign_id,
+            :criterion_type => criterion_type
+          }
+          response = call(:delete_campaign_criterions, message)
+          return get_response_hash(response, __method__)
+        end
 
         private
             def get_service_name
