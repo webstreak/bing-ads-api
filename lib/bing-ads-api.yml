@@ -206,7 +206,19 @@ constants:
       name: 'Name'
       status: 'Status'
       purchase_order: 'PurchaseOrder'
-      change_pending_review: 'ChangePendingReview'
+      pending_changes: 'PendingChanges'
+    pending_changes:
+      comment: 'Comment'
+      end_date: 'EndDate'
+      requested_by_user_id: 'RequestedByUserId'
+      modified_date_time: 'ModifiedDateTime'
+      notification_threshold: 'NotificationThreshold'
+      reference_id: 'ReferenceId'
+      spend_cap_amount: 'SpendCapAmount'
+      start_date: 'StartDate'
+      name: 'Name'
+      purchase_order: 'PurchaseOrder'
+      change_status: 'ChangeStatus'
   # Constansts specific for campaign management services
   campaign_management:
     budget_limit_type:
@@ -625,6 +637,18 @@ orders:
       - status
       - purchase_order
       - change_pending_review
+    pending_changes:
+      - comment
+      - end_date
+      - requested_by_user_id
+      - modified_date_time
+      - notification_threshold
+      - reference_id
+      - spend_cap_amount
+      - start_date
+      - name
+      - purchase_order
+      - change_status
   campaign_management:
     label:
       - color_code

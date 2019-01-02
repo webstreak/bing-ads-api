@@ -2,5 +2,5 @@
 module BingAdsApi
 
     # Gem Version
-    VERSION = "0.7.18"
+    VERSION = "0.7.19"
 end

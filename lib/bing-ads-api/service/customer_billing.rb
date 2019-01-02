@@ -65,12 +65,6 @@ module BingAdsApi
           end
           response = call(:search_insertion_orders,
             { predicates: { "ins1:Predicate" => predicates_for_soap },
-              ordering: {
-                  "ins1:OrderBy" => {
-                  "ins1:Field" => 'Id',
-                  "ins1:Order" => 'Ascending'
-                }
-              },
               page_info: {
                 "ins1:Index" => 0,
                 "ins1:Size" => 10
@@ -88,8 +82,9 @@ module BingAdsApi
           response_hash = get_response_hash(response, __method__)
           return response_hash[:insertion_order_id]
         end
-
-        def update_insertion_order(insertion_order)
+        #it's important to use format ("%Y-%m-%dT%H:%M:%S.%L") for all DateTime params"
+        def update_insertion_order(insertion_order, changes)
+          insertion_order.pending_changes = changes
           response = call(:update_insertion_order, { insertion_order: insertion_order.to_hash(:camelcase) } )
           response_hash = get_response_hash(response, __method__)
           return response_hash
