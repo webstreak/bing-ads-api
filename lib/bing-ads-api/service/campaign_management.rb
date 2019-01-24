@@ -503,12 +503,13 @@ module BingAdsApi
         # Returns:: An array of BingAdsApi::Ad
         #
         # Raises:: exception
-        def get_ads_by_ids(ad_group_id, ad_ids)
-
+        def get_ads_by_ids(ad_group_id, ad_ids, ad_types=[])
 
             message = {
                 :ad_group_id => ad_group_id,
-                :ad_ids => {"ins0:long" => ad_ids} }
+                :ad_ids => {"ins0:long" => ad_ids},
+                :ad_types => ad_types
+            }
             response = call(:get_ads_by_ids, message)
             response_hash = get_response_hash(response, __method__)
 
