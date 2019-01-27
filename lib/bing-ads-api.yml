@@ -731,12 +731,18 @@ orders:
       - text
       - title
     expanded_text_ad:
+      - device_preference
+      - editorial_status
+      - forward_compatibility_map
+      - id
       - final_urls
-      - tracking_url_template
-      - path_1
-      - path_2
-      - text
       - status
+      - tracking_url_template
+      - type
+      - final_urls
+      - path1
+      - path2
+      - text
       - title_part_1
       - title_part_2
     location_target:

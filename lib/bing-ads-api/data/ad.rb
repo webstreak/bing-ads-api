@@ -25,8 +25,8 @@ module BingAdsApi
       :type,
       :final_urls,
       :text,
-      :title_part_1,
-      :title_part_2,
+      :title_part1,
+      :title_part2,
       :tracking_url_template
 
 
@@ -93,11 +93,11 @@ module BingAdsApi
   class ExpandedTextAd < BingAdsApi::Ad
 
     attr_accessor :final_urls,
-      :path_1,
-      :path_2,
+      :path1,
+      :path2,
       :text,
-      :title_part_1,
-      :title_part_2,
+      :title_part1,
+      :title_part2,
       :tracking_url_template
 
 
@@ -113,6 +113,7 @@ module BingAdsApi
       hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:ExpandedTextAd"
       new_hash = {}
       hash['FinalUrls'].each_pair do |k,v|
+        next if k != 'string'
         new_hash.merge!( { k.downcase => v } )
       end
       hash['FinalUrls'] = new_hash

@@ -593,12 +593,11 @@ module BingAdsApi
         #
         # Raises:: exception
         def update_ads(ad_group_id, ads)
-
             ads_for_soap = []
             if ads.is_a? Array
                 ads_for_soap = ads.map{ |ad| ad.to_hash(:camelcase) }
             elsif ads.is_a? BingAdsApi::Ad
-                ads_for_soap = ad.to_hash(:camelcase)
+                ads_for_soap = ads.to_hash(:camelcase)
             else
                 raise "ads must be an array or instance of BingAdsApi::Ad"
             end
@@ -920,12 +919,14 @@ module BingAdsApi
             def initialize_ad(ad_hash)
                 ad = BingAdsApi::Ad.new(ad_hash)
                 case ad_hash["@i:type".to_sym]
+                when "ExpandedTextAd"
+                  ad = BingAdsApi::ExpandedTextAd.new(ad_hash)
                 when "TextAd"
-                    ad = BingAdsApi::TextAd.new(ad_hash)
+                  ad = BingAdsApi::TextAd.new(ad_hash)
                 when "MobileAd"
-                    ad = BingAdsApi::MobileAd.new(ad_hash)
+                  ad = BingAdsApi::MobileAd.new(ad_hash)
                 when "ProductAd"
-                    ad = BingAdsApi::ProductAd.new(ad_hash)
+                  ad = BingAdsApi::ProductAd.new(ad_hash)
                 end
                 return ad
             end
