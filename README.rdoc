@@ -20,6 +20,7 @@ So far, I've just integrated some methods from +CampaignManagement+, +CustomerMa
 
 In all cases, you must initialize some service object with the authentication options
 Here's an example with the CampaignMangement service object
+
 === Starting with Bing Ads API version 12, only OAuth authentication is supported via the AuthenticationToken header element. Managed credentials i.e., the UserName and Password header elements are not supported.
 
    options = {
