@@ -479,6 +479,30 @@ constants:
         device_os: "DeviceOS"
         device_type: "DeviceType"
         status: "Status"
+    ad_group_performance_report:
+      type: "AdGroupPerformanceReportRequest"
+      columns:
+        account_name: "AccountName"
+        account_number: "AccountNumber"
+        account_id: "AccountId"
+        time_period: "TimePeriod"
+        ad_group_name: "AdGroupName"
+        ad_group_id: "AdGroupId"
+        status: "Status"
+        impressions: "Impressions"
+        clicks: "Clicks"
+        average_position: "AveragePosition"
+        spend: "Spend"
+        impression_lost_to_budget_percent: "ImpressionLostToBudgetPercent"
+        impression_share_percent: "ImpressionSharePercent"
+        impression_lost_to_rank_agg_percent: "ImpressionLostToRankAggPercent"
+        conversions: "Conversions"
+        device_type: "DeviceType"
+        network: "Network"
+      filter:
+        ad_distribution: "AdDistribution"
+        device_type: "DeviceType"
+
     keyword_performance_report:
       type: "KeywordPerformanceReportRequest"
       columns:
