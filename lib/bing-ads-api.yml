@@ -485,6 +485,8 @@ constants:
         account_name: "AccountName"
         account_number: "AccountNumber"
         account_id: "AccountId"
+        campaign_id: "CampaignId"
+        campaign_name: "CampaignName"
         time_period: "TimePeriod"
         ad_group_name: "AdGroupName"
         ad_group_id: "AdGroupId"
