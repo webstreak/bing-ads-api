@@ -557,9 +557,7 @@ module BingAdsApi
             else
                 raise "ads must be an array or instance of BingAdsApi::Ad"
             end
-            message = {
-                :ad_group_id => ad_group_id,
-                :ads => {:ad => ads_for_soap} }
+            message = { :ad_group_id => ad_group_id, :ads => { :ad => ads_for_soap } }
             response = call(:add_ads, message)
 
             response_hash = get_response_hash(response, __method__)
@@ -927,6 +925,8 @@ module BingAdsApi
                   ad = BingAdsApi::MobileAd.new(ad_hash)
                 when "ProductAd"
                   ad = BingAdsApi::ProductAd.new(ad_hash)
+                when "ResponsiveSearchAd"
+                  ad = BingAdsApi::ResponsiveSearchAd.new(ad_hash)
                 end
                 return ad
             end

@@ -13,7 +13,7 @@ wsdl:
     reporting: "https://api.sandbox.bingads.microsoft.com/Api/Advertiser/Reporting/v13/ReportingService.svc?singleWsdl"
     bulk: "https://bulk.api.sandbox.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V13/BulkService.svc?singleWsdl"
   production:
-    campaign_management: "https://campaign.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/v13/CampaignManagementService.svc?singleWsdl"
+    campaign_management: "https://campaign.api.bingads.microsoft.com/Api/Advertiser/CampaignManagement/V13/CampaignManagementService.svc?singleWsdl"
     customer_management: "https://clientcenter.api.bingads.microsoft.com/Api/CustomerManagement/v13/CustomerManagementService.svc?singleWsdl"
     customer_billing: "https://clientcenter.api.bingads.microsoft.com/Api/Billing/v13/CustomerBillingService.svc?singleWsdl"
     reporting: "https://api.bingads.microsoft.com/Api/Advertiser/Reporting/v13/ReportingService.svc?singleWsdl"
@@ -263,6 +263,7 @@ constants:
     ad_type:
       text: 'Text'
       expanded_text: 'ExpandedText'
+      responsive_search: 'ResponsiveSearch'
       image: 'Image'
       mobile: 'Mobile'
       rich_search: 'RichSearch'
@@ -699,6 +700,8 @@ orders:
       - text
       - title_part_1
       - title_part_2
+      - descriptions
+      - headlines
     ad_group:
       - cpc_bid
       - ad_rotation
@@ -774,6 +777,20 @@ orders:
       - text
       - title_part_1
       - title_part_2
+    responsive_search_ad:
+      - device_preference
+      - editorial_status
+      - forward_compatibility_map
+      - id
+      - final_urls
+      - status
+      - tracking_url_template
+      - type
+      - final_urls
+      - path1
+      - path2
+      - descriptions
+      - headlines
     location_target:
       - id
       - city_target

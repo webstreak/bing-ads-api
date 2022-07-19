@@ -11,7 +11,7 @@ module BingAdsApi
         attr_accessor :client_proxy, :environment, :max_retry_attempts, :refresh_token, :client_id, :clientProxySettings
 
         # Default logger for services
-        #LOGGER = Logger.new(STDOUT)
+        LOGGER = Logger.new(STDOUT)
 
 
         # Public : Constructor
@@ -90,23 +90,20 @@ module BingAdsApi
             retries_made = 0
             raise "You must provide an operation" if operation.nil?
             begin
-                #LOGGER.debug "BingAdsApi Service"
-                #LOGGER.debug "   Calling #{operation.to_s}"
-                #LOGGER.debug "   Message: #{message}"
-                response = self.client_proxy.call(operation.to_sym,
-                    message: message)
-                #LOGGER.debug "response header:"
-                #LOGGER.debug "\t#{response.header}"
-
-                #LOGGER.info "Operation #{operation.to_s} call success"
-                return response.hash
+                request_xml = client_proxy.build(operation.to_sym, message: message)
+                LOGGER.debug 'Request XML:'
+                LOGGER.debug "#{request_xml}"
+                response = client_proxy.call(operation.to_sym, message: message)
+                LOGGER.debug 'response header:'
+                LOGGER.debug "\t#{response.header}"
+                response.hash
             rescue Savon::SOAPFault => error
-                #LOGGER.error "SOAP Error calling #{operation.to_s}: #{error.http.code}"
+                LOGGER.error "SOAP Error calling #{operation}: #{error.http.code}"
+                LOGGER.error "ERROR IS #{error}"
                 fault_detail = error.to_hash[:fault][:detail]
                 if fault_detail.key?(:api_fault_detail)
-                    api_fault_detail = BingAdsApi::ApiFaultDetail.new(fault_detail[:api_fault_detail])
-                    raise BingAdsApi::ApiException.new(
-                        api_fault_detail, "SOAP Error calling #{operation.to_s}")
+                  api_fault_detail = BingAdsApi::ApiFaultDetail.new(fault_detail[:api_fault_detail])
+                  raise BingAdsApi::ApiException.new(api_fault_detail, "SOAP Error calling #{operation}")
                 elsif fault_detail.key?(:ad_api_fault_detail)
                   ad_api_fault_detail = BingAdsApi::AdApiFaultDetail.new(fault_detail[:ad_api_fault_detail])
                   if ad_api_fault_detail.errors.select { |e| e.code == 109 } && retries_made < max_retry_attempts
@@ -114,16 +111,15 @@ module BingAdsApi
                     retries_made += 1
                     retry
                   end
-                  raise BingAdsApi::ApiException.new(
-                    ad_api_fault_detail, "SOAP Error calling #{operation.to_s}")
+                  raise BingAdsApi::ApiException.new(ad_api_fault_detail, "SOAP Error calling #{operation}")
                 else
                   raise
                 end
             rescue Savon::HTTPError => error
-                #LOGGER.error "Http Error calling #{operation.to_s}: #{error.http.code}"
+                LOGGER.error "Http Error calling #{operation}: #{error.http.code}"
                 raise
             rescue Savon::InvalidResponseError => error
-                #LOGGER.error "Invalid server reponse calling #{operation.to_s}"
+                LOGGER.error "Invalid server reponse calling #{operation}"
                 raise
             rescue
                 # for any other exceptions, retry with an exponential backoff

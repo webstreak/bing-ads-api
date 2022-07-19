@@ -14,6 +14,7 @@ describe BingAdsApi::CampaignManagement do
             account_id: "8506945"
         }
     end
+
     let(:service) { BingAdsApi::CampaignManagement.new(default_options) }
 
     it "should initialize with options" do
@@ -248,6 +249,25 @@ describe BingAdsApi::CampaignManagement do
                 expect(response[:partial_errors]).to be_nil
                 expect(response[:ad_ids][:long]).not_to be_nil
             end
+    end
+
+    describe "expanded text ads" do
+
+        it "should add a single ad" do
+            rsa_ad = BingAdsApi::ResponsiveSearchAd.new(
+                        final_urls: {'ins0:string'=> 'http://test.com'},
+                        status: BingAdsApi::Ad::ACTIVE,
+                        headlines: ['This is headline 1', 'This is headline 2', 'This is headline 3'],
+                        description: ['This is description 1', 'This is description 2'],
+                        path_1: 'test',
+                        path_2: 'test'
+                    )
+
+            response = service.add_ads(@ad_group_id, rsa_ad)
+            expect(response).not_to be_nil
+            expect(response[:partial_errors]).to be_nil
+            expect(response[:ad_ids][:long]).not_to be_nil
+        end
     end
 
 

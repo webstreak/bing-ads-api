@@ -17,7 +17,6 @@ module BingAdsApi
     include BingAdsApi::AdStatus
     include BingAdsApi::AdType
 
-
     attr_accessor :id,
       :device_preference,
       :editorial_status,
@@ -28,7 +27,6 @@ module BingAdsApi
       :title_part1,
       :title_part2,
       :tracking_url_template
-
 
     private
 
@@ -133,9 +131,6 @@ module BingAdsApi
 
   end
 
-
-
-
   ##
   # Public : Defines a product ad.
   #
@@ -169,6 +164,55 @@ module BingAdsApi
       def get_key_order
         super.concat(BingAdsApi::Config.instance.
           campaign_management_orders['product_ad'])
+      end
+
+  end
+
+  ##
+  # Public : Defines responsive search ad.
+  #
+  # Reference: https://docs.microsoft.com/en-us/advertising/campaign-management-service/responsivesearchad?view=bingads-13
+  #
+  # Author:: mattking@gosokal.com
+  #
+  class ResponsiveSearchAd < BingAdsApi::Ad
+
+    attr_accessor :descriptions, :headlines
+
+    # Public : Specification of DataObject#to_hash method that ads the type attribute based on this specific class
+    #
+    # Author:: jlopezn@neonline.cl
+    #
+    # keys - specifies the keys case
+    #
+    # Returns:: Hash
+    def to_hash(keys = :underscore)
+      hash = super(keys)
+      hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:ResponsiveSearchAd"
+      new_hash = {}
+      hash['FinalUrls'].each_pair do |k,v|
+        next if !k.include?('string')
+        new_hash.merge!( { k.downcase => v } )
+      end
+      hash['FinalUrls'] = new_hash
+      hash['Headlines'] = hash['Headlines'].map do |headline|
+        { 'AssetLink' => { 'TextAsset' => { 'Text' => headline, '@xsi:type' => 'TextAsset' } } }
+      end
+      hash['Descriptions'] = hash['Descriptions'].map do |desc|
+        { 'AssetLink' => { 'TextAsset' => { 'Text' => desc, '@xsi:type' => 'TextAsset' } } }
+      end
+      hash
+    end
+
+    private
+
+      # Internal: Retrieve the ordered array of keys corresponding to this data
+      # object.
+      #
+      # Author: alex.cavalli@offers.com
+      def get_key_order
+        super.concat(BingAdsApi::Config.instance.
+          campaign_management_orders['responsive_search_ad'])
       end
 
   end

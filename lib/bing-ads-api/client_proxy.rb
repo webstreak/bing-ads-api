@@ -26,7 +26,7 @@ module BingAdsApi
   class ClientProxy
 
     # Public : Namespace para atributos bing. Hace referencia a la versión de API usada
-    NAMESPACE = :v12
+    NAMESPACE = :v13
 
     # Public : Case empleado los nombres de atributos en los XML
     KEYS_CASE = :camelcase
@@ -102,6 +102,10 @@ module BingAdsApi
       self.service.call(service_name, message)
     end
 
+    def build(service_name, message)
+      service.operation(service_name).build(message)
+    end
+
 
     private
       # Internal : Wrapper for Savon client instances
@@ -118,11 +122,13 @@ module BingAdsApi
           convert_request_keys_to: KEYS_CASE,
           wsdl: self.wsdl_url,
           namespace_identifier: NAMESPACE,
+          log_level: :debug,
+          log: true,
           soap_header: build_headers
         }
         settings.merge!(client_settings) if client_settings
 
-        return Savon.client(settings)
+        Savon.client(settings)
       end
 
 
@@ -138,8 +144,7 @@ module BingAdsApi
           headers["#{NAMESPACE.to_s}:UserName"] = self.username
           headers["#{NAMESPACE.to_s}:Password"] = self.password
         end
-        puts headers
-        return headers
+        headers
       end
   end
 
