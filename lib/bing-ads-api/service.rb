@@ -99,7 +99,7 @@ module BingAdsApi
                 #LOGGER.debug "\t#{response.header}"
 
                 #LOGGER.info "Operation #{operation.to_s} call success"
-                return response.hash
+                return response.full_hash
             rescue Savon::SOAPFault => error
                 #LOGGER.error "SOAP Error calling #{operation.to_s}: #{error.http.code}"
                 fault_detail = error.to_hash[:fault][:detail]

@@ -12,3 +12,4 @@ gemspec
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'savon', '~> 2.13.0'
