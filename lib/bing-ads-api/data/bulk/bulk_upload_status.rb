@@ -87,8 +87,8 @@ module BingAdsApi
     def download_result_file(target_directory)
       return nil unless completed? || completed_with_errors?
 
-      dir = Dir.exists?(target_directory) ? target_directory : File.dirname(target_directory)
-      raise ArgumentError, "Could not determine target directory from argument: #{target_directory}" unless Dir.exists?(dir)
+      dir = Dir.exist?(target_directory) ? target_directory : File.dirname(target_directory)
+      raise ArgumentError, "Could not determine target directory from argument: #{target_directory}" unless Dir.exist?(dir)
 
       result_file_target = File.join(dir, "#{request_id}.zip")
 
